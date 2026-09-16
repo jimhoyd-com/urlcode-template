@@ -8,8 +8,8 @@ then change the YAML and function to build your own project.
 Use GitHub's **Use this template** button to create your own repository, or clone:
 
 ```sh
-git clone https://github.com/jimhoyd-com/urlcode-template.git my-links
-cd my-links
+git clone https://github.com/jimhoyd-com/urlcode-template.git gitroll-link
+cd gitroll-link
 npm ci
 npm run dev
 ```
