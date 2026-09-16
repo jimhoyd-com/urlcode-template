@@ -14,9 +14,10 @@
     "doctor": "urlcode doctor",
     "routes": "urlcode routes",
     "audit": "urlcode audit --expect-routes 2",
-    "benchmark": "urlcode benchmark"
+    "benchmark": "urlcode benchmark",
+    "scaffold": "urlcode scaffold"
   },
   "dependencies": {
-    "urlcode": "https://codeload.github.com/jimhoyd-com/urlcode/tar.gz/1b2b44b3a94ce79a5b630729f944fabe75850da1"
+    "urlcode": "https://codeload.github.com/jimhoyd-com/urlcode/tar.gz/14ca58908210257bb6d37b95c5f846c1b8415776"
   }
 }

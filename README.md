@@ -226,9 +226,17 @@ host; external bindings require a separate operator policy. Read the
 Never commit credentials, tokens or session cookies in YAML headers.
 
 This pins the hardened alpha.8 local/self-hosted runtime. Review the
-[release-readiness gates](https://github.com/jimhoyd-com/urlcode/blob/1b2b44b3a94ce79a5b630729f944fabe75850da1/docs/RELEASE-READINESS.md) before deployment. Read the
+[release-readiness gates](https://github.com/jimhoyd-com/urlcode/blob/14ca58908210257bb6d37b95c5f846c1b8415776/docs/RELEASE-READINESS.md) before deployment. Read the
 [operations guide](https://github.com/jimhoyd-com/urlcode/blob/main/docs/OPERATIONS.md)
 before deploying. Provider adapters and URLCode Cloud remain future work.
 
 The license is still undecided. Neither this template nor the runtime selects
 license terms yet; public availability does not resolve that decision.
+
+## YAML-first scaffolding
+
+After adding references in YAML, run `npm run scaffold -- --dry-run` to preview
+missing files, then `npm run scaffold` to create them. Existing files stay intact.
+Function/middleware placeholders return 501 until implemented; binary assets and
+external bindings are reported for you to supply.
+[Full guide](https://github.com/jimhoyd-com/urlcode/blob/14ca58908210257bb6d37b95c5f846c1b8415776/docs/SCAFFOLDING.md).
