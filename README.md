@@ -226,7 +226,7 @@ host; external bindings require a separate operator policy. Read the
 Never commit credentials, tokens or session cookies in YAML headers.
 
 This pins the hardened alpha.8 local/self-hosted runtime. Review the
-[release-readiness gates](https://github.com/jimhoyd-com/urlcode/blob/fba7a65450e02e59ab5a3b515da80c2472559186/docs/RELEASE-READINESS.md) before deployment. Read the
+[release-readiness gates](https://github.com/jimhoyd-com/urlcode/blob/5822b29fa153bcc7863e7b0e7598b8951bee6690/docs/RELEASE-READINESS.md) before deployment. Read the
 [operations guide](https://github.com/jimhoyd-com/urlcode/blob/main/docs/OPERATIONS.md)
 before deploying. Provider adapters and URLCode Cloud remain future work.
 
@@ -239,7 +239,7 @@ After adding references in YAML, run `npm run scaffold -- --dry-run` to preview
 missing files, then `npm run scaffold` to create them. Existing files stay intact.
 Function/middleware placeholders return 501 until implemented; binary assets and
 external bindings are reported for you to supply.
-[Full guide](https://github.com/jimhoyd-com/urlcode/blob/fba7a65450e02e59ab5a3b515da80c2472559186/docs/SCAFFOLDING.md).
+[Full guide](https://github.com/jimhoyd-com/urlcode/blob/5822b29fa153bcc7863e7b0e7598b8951bee6690/docs/SCAFFOLDING.md).
 
 ## Live-link opt-in
 
@@ -251,4 +251,8 @@ functions and middleware do not require it. `npm run routes` reports the setting
 Live-link deployment supports separate bounded reader/writer pools through
 operator CLI options. SQLite remains single-host and requires a patched SQLite
 build bundled with Node; check `npm run doctor`.
-[Pool sizing and consistency](https://github.com/jimhoyd-com/urlcode/blob/fba7a65450e02e59ab5a3b515da80c2472559186/docs/DYNAMIC-LINKS.md#separate-reader-and-writer-pools).
+[Pool sizing and consistency](https://github.com/jimhoyd-com/urlcode/blob/5822b29fa153bcc7863e7b0e7598b8951bee6690/docs/DYNAMIC-LINKS.md#separate-reader-and-writer-pools).
+
+The pinned runtime includes security fixes for failed log collectors, management
+HTTP admission/timeouts, and metadata-only development watching. Review the
+[security audit and remaining gates](https://github.com/jimhoyd-com/urlcode/blob/5822b29fa153bcc7863e7b0e7598b8951bee6690/docs/SECURITY-AUDIT.md) before production use.
