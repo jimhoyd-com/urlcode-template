@@ -128,7 +128,8 @@ the expected count stays **2**. More examples are in the
 supported. Exact routes win before parameter routes, then static mounts.
 `dev` automatically swaps validated snapshots after YAML edits; production
 `serve` uses a fixed snapshot. See [matching and dynamic links](https://github.com/jimhoyd-com/urlcode/blob/main/docs/ROUTING.md)
-for wildcard limits, precedence and the future live-link storage capability.
+for wildcard limits and precedence. Optional [stored links](https://github.com/jimhoyd-com/urlcode/blob/main/docs/DYNAMIC-LINKS.md)
+now support live creation/update/deletion without reloading YAML.
 
 ## Middleware
 
@@ -199,6 +200,16 @@ for invalid-input, HEAD/cache/range, expiry, reload, security, load, deployment
 and rollback checks. Remote destination health, DNS/TLS and sustained soak
 checks remain separate work; a local passing audit is not production certification.
 
+## Optional live short links
+
+The starter's two examples still work without a database. When your application
+needs visitors to create short links, add a native `link` route and explicitly
+bind an external SQLite store. Your trusted backend can call a separate,
+token-protected management API; never put that token in browser code. Committed
+record changes become visible without restarting the public server. See the
+[complete setup and API](https://github.com/jimhoyd-com/urlcode/blob/main/docs/DYNAMIC-LINKS.md).
+The first adapter supports one host, including multiple local processes.
+
 ## Grow from here
 
 Declare incoming methods and path/query/header inputs, body size/media-type
@@ -214,7 +225,7 @@ host; external bindings require a separate operator policy. Read the
 [security model](https://github.com/jimhoyd-com/urlcode/blob/main/docs/FUNCTION-SECURITY.md).
 Never commit credentials, tokens or session cookies in YAML headers.
 
-This uses the alpha.7 local/self-hosted runtime. Read the
+This uses the alpha.8 local/self-hosted runtime. Read the
 [operations guide](https://github.com/jimhoyd-com/urlcode/blob/main/docs/OPERATIONS.md)
 before deploying. Provider adapters and URLCode Cloud remain future work.
 
