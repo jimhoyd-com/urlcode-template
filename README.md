@@ -78,6 +78,33 @@ names. An explicit list replaces the defaults: `[POST]` allows only POST;
 Redirects default to status 302, and responses default to `Cache-Control: no-store`,
 so the starter omits those declarations too.
 
+## Are my links ready?
+
+```sh
+npm run routes
+npm test
+npm run audit
+npm run benchmark -- --requests 1000 --concurrency 2
+```
+
+`routes` lists route counts, handlers, methods and active/disabled/expired state.
+`test` checks your explicit expected responses. `audit` adds automatic native
+checks and verifies every active route/method has a passing example. This starter
+expects **exactly 2 configured routes**; update `--expect-routes` in package.json
+intentionally when your app grows. Missing tests, failed responses or a wrong
+count fail the command and CI. Add business assertions in `tests/requests.json`.
+
+`benchmark` measures local GET/HEAD response latency, throughput, errors and
+completed request counts; it does not follow external redirects. Add
+`--max-p95-ms 50` when you have chosen a measured latency budget. A default run
+is not a production capacity guarantee. Make equivalents: `make routes`,
+`make audit`, `make benchmark ARGS='--requests 1000 --concurrency 2'`.
+
+See the [readiness checklist](https://github.com/jimhoyd-com/urlcode/blob/main/docs/READINESS.md)
+for invalid-input, HEAD/cache/range, expiry, reload, security, load, deployment
+and rollback checks. Remote destination health, DNS/TLS and sustained soak
+checks remain separate work; a local passing audit is not production certification.
+
 ## Grow from here
 
 Declare incoming methods and path/query/header inputs, body size/media-type
@@ -93,7 +120,7 @@ host; external bindings require a separate operator policy. Read the
 [security model](https://github.com/jimhoyd-com/urlcode/blob/main/docs/FUNCTION-SECURITY.md).
 Never commit credentials, tokens or session cookies in YAML headers.
 
-This uses the alpha.4 local/self-hosted runtime. Read the
+This uses the alpha.5 local/self-hosted runtime. Read the
 [operations guide](https://github.com/jimhoyd-com/urlcode/blob/main/docs/OPERATIONS.md)
 before deploying. Provider adapters and URLCode Cloud remain future work.
 

@@ -32,5 +32,21 @@
   {
     "path": "/missing",
     "status": 404
+  },
+  {
+    "path": "/hello/Ada",
+    "method": "POST",
+    "status": 405,
+    "expectHeaders": {
+      "allow": "GET, HEAD"
+    }
+  },
+  {
+    "path": "/hello/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "status": 400
+  },
+  {
+    "path": "/hello/%ZZ",
+    "status": 400
   }
 ]

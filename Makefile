@@ -20,3 +20,7 @@ start: node_modules/.package-lock.json
 	$(NPM) start -- --host "$(HOST)" --port "$(PORT)"
 validate test doctor: node_modules/.package-lock.json
 	$(NPM) run $@
+
+.PHONY: routes audit benchmark
+routes audit benchmark: node_modules/.package-lock.json
+	$(NPM) run $@ -- $(ARGS)

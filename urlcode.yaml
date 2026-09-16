@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/jimhoyd-com/urlcode/cd2a880fd266e4b004672094e10bd77d29852ced/schemas/urlcode.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/jimhoyd-com/urlcode/6004aa6e983970de2a1874a73ab2ebdcb1132a9e/schemas/urlcode.schema.json
 # Methods default to GET and HEAD. Set methods: [POST] when needed.
 version: "1"
 routes:

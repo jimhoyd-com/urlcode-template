@@ -11,9 +11,12 @@
     "start": "urlcode serve",
     "validate": "urlcode validate --local",
     "test": "urlcode test",
-    "doctor": "urlcode doctor"
+    "doctor": "urlcode doctor",
+    "routes": "urlcode routes",
+    "audit": "urlcode audit --expect-routes 2",
+    "benchmark": "urlcode benchmark"
   },
   "dependencies": {
-    "urlcode": "https://codeload.github.com/jimhoyd-com/urlcode/tar.gz/cd2a880fd266e4b004672094e10bd77d29852ced"
+    "urlcode": "https://codeload.github.com/jimhoyd-com/urlcode/tar.gz/6004aa6e983970de2a1874a73ab2ebdcb1132a9e"
   }
 }
