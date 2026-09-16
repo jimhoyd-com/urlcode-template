@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/jimhoyd-com/urlcode/862dd238f9a69d88fc39b313466f5f59f59925dd/schemas/urlcode.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/jimhoyd-com/urlcode/317bd23b4557b2dec55a156fd56695565367bc1b/schemas/urlcode.schema.json
 # File locations do not change route paths. GET/HEAD are the default methods.
 version: "1"
 routes:
@@ -9,6 +9,8 @@ routes:
         in: path
         required: true
         schema: {type: string, minLength: 1, maxLength: 80}
+    middleware:
+      - source: middleware/headers.mjs
     function:
       source: functions/hello.mjs
       args:

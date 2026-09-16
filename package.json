@@ -17,6 +17,6 @@
     "benchmark": "urlcode benchmark"
   },
   "dependencies": {
-    "urlcode": "https://codeload.github.com/jimhoyd-com/urlcode/tar.gz/862dd238f9a69d88fc39b313466f5f59f59925dd"
+    "urlcode": "https://codeload.github.com/jimhoyd-com/urlcode/tar.gz/317bd23b4557b2dec55a156fd56695565367bc1b"
   }
 }

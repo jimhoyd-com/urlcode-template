@@ -42,6 +42,7 @@ without following redirects. Change ports with `npm run dev -- --port 3001`.
 | `routes/functions.yaml` | Function example, inputs, arguments and response headers |
 | `routes/marketing/links.yaml` | Regular redirect example in a nested folder |
 | `functions/hello.mjs` | Your request function |
+| `middleware/headers.mjs` | Reusable before/after logic around the function |
 | `tests/requests.json` | Local HTTP assertions you can extend |
 | `package.json` / `package-lock.json` | Commands and pinned runtime dependency |
 | `Makefile` | Optional shortcuts |
@@ -100,6 +101,25 @@ includes belong in the entry point (nested includes are not supported).
 `npm run routes`, `npm test` and `npm run audit` operate on the combined project;
 the expected count stays **2**. More examples are in the
 [organization guide](https://github.com/jimhoyd-com/urlcode/blob/main/docs/ORGANIZATION.md).
+
+## Middleware
+
+The function route declares `middleware: [{source: middleware/headers.mjs}]`.
+That module wraps the handler and adds `x-example-middleware: active`:
+
+```js
+export default async function headers(request, context, next) {
+  const response = await next();
+  response.headers.set('x-example-middleware', 'active');
+  return response;
+}
+```
+
+Reuse middleware on other routes, return a response early, or share request-local
+values through `context.state`. Every chain shares the function sandbox and one
+deadline. The regular redirect keeps its native fast path without middleware.
+See [middleware semantics](https://github.com/jimhoyd-com/urlcode/blob/main/docs/MIDDLEWARE.md)
+for ordering, native body limits, binding policy and explicit test requirements.
 
 ## Method defaults
 
@@ -166,7 +186,7 @@ host; external bindings require a separate operator policy. Read the
 [security model](https://github.com/jimhoyd-com/urlcode/blob/main/docs/FUNCTION-SECURITY.md).
 Never commit credentials, tokens or session cookies in YAML headers.
 
-This uses the alpha.6 local/self-hosted runtime. Read the
+This uses the alpha.7 local/self-hosted runtime. Read the
 [operations guide](https://github.com/jimhoyd-com/urlcode/blob/main/docs/OPERATIONS.md)
 before deploying. Provider adapters and URLCode Cloud remain future work.
 
