@@ -1,9 +1,9 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/jimhoyd-com/urlcode/cd2a880fd266e4b004672094e10bd77d29852ced/schemas/urlcode.schema.json
+# Methods default to GET and HEAD. Set methods: [POST] when needed.
 version: "1"
 routes:
   # Your code runs when this URL is requested.
   /hello/{name}:
-    methods: [GET, HEAD]
     parameters:
       - name: name
         in: path
@@ -15,15 +15,9 @@ routes:
         name: {from: path, name: name}
     response:
       headers:
-        Cache-Control: no-store
         X-Powered-By: URLCode
 
   # A regular redirect needs no custom code.
   /go:
-    methods: [GET, HEAD]
     redirect:
       url: https://example.com
-      status: 302
-    response:
-      headers:
-        Cache-Control: no-store

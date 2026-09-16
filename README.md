@@ -56,6 +56,28 @@ own repository before pushing your changes.
 | `npm start` | `make start` | Fixed server snapshot, no watcher or dotenv |
 | `npm run doctor` | `make doctor` | Runtime/platform details |
 
+## Method defaults
+
+Omit `methods` for ordinary links: **GET and HEAD are allowed by default**.
+Declare methods only when a route needs something different:
+
+```yaml
+routes:
+  /go:
+    redirect:
+      url: https://example.com
+  /submit:
+    methods: [POST]
+    function:
+      source: functions/submit.mjs
+```
+
+Create `functions/submit.mjs` before adding that route. Use uppercase HTTP method
+names. An explicit list replaces the defaults: `[POST]` allows only POST;
+`[GET, HEAD, POST]` allows all three. Other methods receive 405 with an Allow header.
+Redirects default to status 302, and responses default to `Cache-Control: no-store`,
+so the starter omits those declarations too.
+
 ## Grow from here
 
 Declare incoming methods and path/query/header inputs, body size/media-type
