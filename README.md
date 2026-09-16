@@ -3,6 +3,10 @@
 **A URL that runs your code, and a URL that redirects.** Start with two examples,
 then change the YAML and function to build your own project.
 
+There is one starter, containing both examples. If URLCode is already installed,
+`urlcode init ../gitroll-link` creates the same route examples; no `--template`
+choice is needed. This repository adds a pinned runtime dependency and npm workflow.
+
 ## Run it
 
 Use GitHub's **Use this template** button to create your own repository, or clone:
@@ -162,7 +166,7 @@ host; external bindings require a separate operator policy. Read the
 [security model](https://github.com/jimhoyd-com/urlcode/blob/main/docs/FUNCTION-SECURITY.md).
 Never commit credentials, tokens or session cookies in YAML headers.
 
-This uses the alpha.5 local/self-hosted runtime. Read the
+This uses the alpha.6 local/self-hosted runtime. Read the
 [operations guide](https://github.com/jimhoyd-com/urlcode/blob/main/docs/OPERATIONS.md)
 before deploying. Provider adapters and URLCode Cloud remain future work.
 
