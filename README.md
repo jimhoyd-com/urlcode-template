@@ -75,6 +75,14 @@ own repository before pushing your changes.
 | `npm start` | `make start` | Fixed server snapshot, no watcher or dotenv |
 | `npm run doctor` | `make doctor` | Runtime/platform details |
 
+## Organization and readability practices
+
+Keep this starter small, then group related routes/code by feature as it grows.
+Use descriptive names, focused middleware, explicit imports/includes and HTTP
+assertions. Keep secrets and operator settings separate from route behavior.
+See [best practices with complete layout examples](https://github.com/jimhoyd-com/urlcode/blob/main/docs/BEST-PRACTICES.md)
+for readable YAML, reusable helpers, test organization and safe refactoring.
+
 ## Organize routes your way
 
 This starter demonstrates multiple files without adding more routes:
