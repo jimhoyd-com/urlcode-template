@@ -225,7 +225,8 @@ host; external bindings require a separate operator policy. Read the
 [security model](https://github.com/jimhoyd-com/urlcode/blob/main/docs/FUNCTION-SECURITY.md).
 Never commit credentials, tokens or session cookies in YAML headers.
 
-This uses the alpha.8 local/self-hosted runtime. Read the
+This pins the hardened alpha.8 local/self-hosted runtime. Review the
+[release-readiness gates](https://github.com/jimhoyd-com/urlcode/blob/1b2b44b3a94ce79a5b630729f944fabe75850da1/docs/RELEASE-READINESS.md) before deployment. Read the
 [operations guide](https://github.com/jimhoyd-com/urlcode/blob/main/docs/OPERATIONS.md)
 before deploying. Provider adapters and URLCode Cloud remain future work.
 
