@@ -102,6 +102,15 @@ includes belong in the entry point (nested includes are not supported).
 the expected count stays **2**. More examples are in the
 [organization guide](https://github.com/jimhoyd-com/urlcode/blob/main/docs/ORGANIZATION.md).
 
+## Route matching and new links
+
+`/hello/{name}` captures one nonempty segment: `/hello/Ada` matches, but
+`/hello/Ada/team` does not. Parameters are not greedy; regex routing is not
+supported. Exact routes win before parameter routes, then static mounts.
+`dev` automatically swaps validated snapshots after YAML edits; production
+`serve` uses a fixed snapshot. See [matching and dynamic links](https://github.com/jimhoyd-com/urlcode/blob/main/docs/ROUTING.md)
+for wildcard limits, precedence and the future live-link storage capability.
+
 ## Middleware
 
 The function route declares `middleware: [{source: middleware/headers.mjs}]`.
