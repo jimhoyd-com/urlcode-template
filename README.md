@@ -7,6 +7,17 @@ There is one starter, containing both examples. If URLCode is already installed,
 `urlcode init ../gitroll-link` creates the same route examples; no `--template`
 choice is needed. This repository adds a pinned runtime dependency and npm workflow.
 
+## YAML and AI authoring references
+
+Use the [YAML cookbook](https://github.com/jimhoyd-com/urlcode/blob/main/docs/YAML-GUIDE.md)
+and [field reference](https://github.com/jimhoyd-com/urlcode/blob/main/docs/YAML-REFERENCE.md)
+for complete configuration examples. Give your AI assistant the
+[authoring guide](https://github.com/jimhoyd-com/urlcode/blob/main/docs/AI-AUTHORING.md)
+and the schema matching your pinned runtime. Future runtime upgrades may change
+main-branch docs, so check your installed version before copying new fields.
+Operators should read [capacity](https://github.com/jimhoyd-com/urlcode/blob/main/docs/CAPACITY.md)
+and [DDoS/recovery](https://github.com/jimhoyd-com/urlcode/blob/main/docs/RESILIENCE.md).
+
 ## Run it
 
 Use GitHub's **Use this template** button to create your own repository, or clone:
