@@ -25,7 +25,8 @@ Open these URLs:
 - **http://127.0.0.1:3000/hello/Ada** runs `functions/hello.mjs`, returning `{"message":"Hello, Ada!"}`.
 - **http://127.0.0.1:3000/go** sends a regular redirect to example.com.
 
-Change `urlcode.yaml` or `functions/hello.mjs`; valid edits reload automatically.
+Change a file under `routes/` or `functions/hello.mjs`; valid edits reload automatically.
+`urlcode.yaml` selects which route files to load.
 Ctrl+C stops the server. In another terminal, `npm test` checks both examples
 without following redirects. Change ports with `npm run dev -- --port 3001`.
 
@@ -33,7 +34,9 @@ without following redirects. Change ports with `npm run dev -- --port 3001`.
 
 | File | Purpose |
 |---|---|
-| `urlcode.yaml` | Routes, validated inputs, function arguments and response headers |
+| `urlcode.yaml` | Entry point listing the route files to load |
+| `routes/functions.yaml` | Function example, inputs, arguments and response headers |
+| `routes/marketing/links.yaml` | Regular redirect example in a nested folder |
 | `functions/hello.mjs` | Your request function |
 | `tests/requests.json` | Local HTTP assertions you can extend |
 | `package.json` / `package-lock.json` | Commands and pinned runtime dependency |
@@ -55,6 +58,44 @@ own repository before pushing your changes.
 | `npm test` | `make test` | Run local HTTP assertions |
 | `npm start` | `make start` | Fixed server snapshot, no watcher or dotenv |
 | `npm run doctor` | `make doctor` | Runtime/platform details |
+
+## Organize routes your way
+
+This starter demonstrates multiple files without adding more routes:
+
+```text
+urlcode.yaml
+routes/
+  functions.yaml
+  marketing/
+    links.yaml
+functions/
+  hello.mjs
+```
+
+The entry point loads explicit project-relative files:
+
+```yaml
+version: "1"
+includes:
+  - routes/functions.yaml
+  - routes/marketing/links.yaml
+routes: {}
+```
+
+Each included file has its own `version: "1"` and `routes` mapping. Folder names
+are your choice: organize by feature, team, campaign, customer or any layout that
+helps you. Folders do not add URL prefixes. You can rename/move these YAML files
+and update the include list, or put both routes directly in `urlcode.yaml` and
+remove `includes`. You can also mix inline routes with included files.
+
+Paths such as `source: functions/hello.mjs` always resolve from the project root,
+not from the YAML file's folder. Duplicate route paths fail validation rather than
+overriding each other. Includes are explicit files, not folder scans/globs; all
+includes belong in the entry point (nested includes are not supported).
+`npm run routes`, `npm test` and `npm run audit` operate on the combined project;
+the expected count stays **2**. More examples are in the
+[organization guide](https://github.com/jimhoyd-com/urlcode/blob/main/docs/ORGANIZATION.md).
 
 ## Method defaults
 
