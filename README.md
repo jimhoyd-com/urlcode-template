@@ -92,7 +92,8 @@ npm run benchmark -- --requests 1000 --concurrency 2
 checks and verifies every active route/method has a passing example. This starter
 expects **exactly 2 configured routes**; update `--expect-routes` in package.json
 intentionally when your app grows. Missing tests, failed responses or a wrong
-count fail the command and CI. Add business assertions in `tests/requests.json`.
+count fail the command and CI. Add business assertions in `tests/requests.json`: status-only successes do not
+count toward coverage without a body or header assertion.
 
 `benchmark` measures local GET/HEAD response latency, throughput, errors and
 completed request counts; it does not follow external redirects. Add
