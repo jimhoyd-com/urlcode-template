@@ -1,0 +1,19 @@
+{
+  "name": "my-urlcode-project",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "urlcode dev",
+    "start": "urlcode serve",
+    "validate": "urlcode validate --local",
+    "test": "urlcode test",
+    "doctor": "urlcode doctor"
+  },
+  "dependencies": {
+    "urlcode": "https://codeload.github.com/jimhoyd-com/urlcode/tar.gz/cd2a880fd266e4b004672094e10bd77d29852ced"
+  }
+}
