@@ -226,7 +226,7 @@ host; external bindings require a separate operator policy. Read the
 Never commit credentials, tokens or session cookies in YAML headers.
 
 This pins the hardened alpha.8 local/self-hosted runtime. Review the
-[release-readiness gates](https://github.com/jimhoyd-com/urlcode/blob/14ca58908210257bb6d37b95c5f846c1b8415776/docs/RELEASE-READINESS.md) before deployment. Read the
+[release-readiness gates](https://github.com/jimhoyd-com/urlcode/blob/9438009ecd88c1fbd92e3afd53d5869ebb8ed41d/docs/RELEASE-READINESS.md) before deployment. Read the
 [operations guide](https://github.com/jimhoyd-com/urlcode/blob/main/docs/OPERATIONS.md)
 before deploying. Provider adapters and URLCode Cloud remain future work.
 
@@ -239,4 +239,11 @@ After adding references in YAML, run `npm run scaffold -- --dry-run` to preview
 missing files, then `npm run scaffold` to create them. Existing files stay intact.
 Function/middleware placeholders return 501 until implemented; binary assets and
 external bindings are reported for you to supply.
-[Full guide](https://github.com/jimhoyd-com/urlcode/blob/14ca58908210257bb6d37b95c5f846c1b8415776/docs/SCAFFOLDING.md).
+[Full guide](https://github.com/jimhoyd-com/urlcode/blob/9438009ecd88c1fbd92e3afd53d5869ebb8ed41d/docs/SCAFFOLDING.md).
+
+## Live-link opt-in
+
+The entry `urlcode.yaml` explicitly sets `dynamicLinks: false`. Change it to true
+before adding live `link` handlers and supply the operator store binding. Included
+route files cannot override this setting. Regular parameterized redirects,
+functions and middleware do not require it. `npm run routes` reports the setting.

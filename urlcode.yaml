@@ -1,6 +1,8 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/jimhoyd-com/urlcode/14ca58908210257bb6d37b95c5f846c1b8415776/schemas/urlcode.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/jimhoyd-com/urlcode/9438009ecd88c1fbd92e3afd53d5869ebb8ed41d/schemas/urlcode.schema.json
 # Organize files however you like; list their paths from this project root.
 version: "1"
+# Opt in only when using live stored-link routes.
+dynamicLinks: false
 includes:
   - routes/functions.yaml
   - routes/marketing/links.yaml
