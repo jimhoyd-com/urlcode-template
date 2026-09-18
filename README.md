@@ -9,10 +9,19 @@ choice is needed. This repository adds a pinned runtime dependency and npm workf
 
 ## YAML and AI authoring references
 
+This project carries two Claude agent skills at `.claude/skills/`:
+`urlcode-authoring` (writing and editing `urlcode.yaml`, functions and
+middleware) and `urlcode-operations` (deployment, verifying a live
+deployment, capacity, resilience and the management API). A Claude session
+opened in this project loads them automatically for a matching task, no
+setup needed. Both point at the docs shipped in
+`node_modules/@jimhoyd/urlcode/` rather than restating the contract, so
+they always match your pinned runtime version, not `main`.
+
 Use the [YAML cookbook](https://github.com/jimhoyd-com/urlcode/blob/main/docs/YAML-GUIDE.md)
 and [field reference](https://github.com/jimhoyd-com/urlcode/blob/main/docs/YAML-REFERENCE.md)
-for complete configuration examples. Give your AI assistant the
-[authoring guide](https://github.com/jimhoyd-com/urlcode/blob/main/docs/AI-AUTHORING.md)
+for complete configuration examples. Without the bundled skills, give your AI
+assistant the [authoring guide](https://github.com/jimhoyd-com/urlcode/blob/main/docs/AI-AUTHORING.md)
 and the schema matching your pinned runtime. Future runtime upgrades may change
 main-branch docs, so check your installed version before copying new fields.
 Operators should read [capacity](https://github.com/jimhoyd-com/urlcode/blob/main/docs/CAPACITY.md)
