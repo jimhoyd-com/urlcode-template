@@ -214,14 +214,12 @@ checks remain separate work; a local passing audit is not production certificati
 
 ## Optional live short links
 
-The starter's two examples still work without a database. When your application
-needs visitors to create short links, add the
-[urlcode-dynamic-link](https://github.com/jimhoyd-com/urlcode-dynamic-link)
-extension and bind its store. The runtime itself no longer carries a native
-`link` handler: `0.4.0-alpha.2` removed it, along with the top-level
-`dynamicLinks` switch, in favour of that mount-based extension. Your trusted
-backend can call its token-protected management API; never put that token in
-browser code.
+The starter's two examples still work without a database. The runtime itself no
+longer carries a native `link` handler: `0.4.0-alpha.2` removed it, along with
+the top-level `dynamicLinks` switch, in favour of a mount-based extension. That
+extension (`urlcode-dynamic-link`) has since been retired and unpublished, so
+there is no supported package for live short links today — an application that
+needs them owns that storage itself.
 
 ## Grow from here
 
@@ -268,14 +266,14 @@ external bindings are reported for you to supply.
 ## Live links
 
 The `0.4.0-alpha.2` runtime this template pins has no native `link` handler and
-no top-level `dynamicLinks` switch; both were removed in favour of the
-[urlcode-dynamic-link](https://github.com/jimhoyd-com/urlcode-dynamic-link)
-extension. Nothing in this template depends on them, so there is no opt-in to
-set. Regular parameterized redirects, functions and middleware never required
-them.
+no top-level `dynamicLinks` switch; both were removed in favour of a mount-based
+extension, which has itself since been retired and unpublished. Nothing in this
+template depends on them, so there is no opt-in to set. Regular parameterized
+redirects, functions and middleware never required them.
 
-Store sizing, bounded reader/writer pools and the single-host SQLite caveat now
-belong to that extension; read its README before deploying live links, and
+Store sizing, bounded reader/writer pools and the single-host SQLite caveat
+belong to whatever store an application brings itself; read that store's own
+guidance before deploying live links, and
 check `npm run doctor` for the patched SQLite build Node needs.
 
 The pinned runtime includes security fixes for failed log collectors, management
