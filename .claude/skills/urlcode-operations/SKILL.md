@@ -1,6 +1,6 @@
 ---
 name: urlcode-operations
-description: Deploy, verify, monitor and operate a URLCode project — process/container deployment, release readiness, verifying a live deployment against the project, capacity/audit/benchmark, observability, DDoS/overload resilience, and private management (grants). Use when the user asks to deploy, check readiness, verify a running deployment, size/benchmark a project, monitor it, plan for overload, or manage bindings. Reports operational limits and unimplemented capabilities as gaps instead of inventing mitigations.
+description: Deploy, verify, monitor and operate a URLCode project — process/container deployment, release readiness, verifying a live deployment against the project, capacity/audit/benchmark, observability, DDoS/overload resilience, and operator binding grants. Use when the user asks to deploy, check readiness, verify a running deployment, size/benchmark a project, monitor it, plan for overload, or manage bindings. Reports operational limits and unimplemented capabilities as gaps instead of inventing mitigations.
 ---
 
 # Operating a URLCode deployment
@@ -30,9 +30,7 @@ another version.
    overload and DDoS; what layer each defense belongs to.
 6. `docs/MONITORING.md` and `docs/OBSERVABILITY.md` — health/ready probes,
    logs, metrics format, what is and is not exported.
-7. `docs/MANAGEMENT-SECURITY.md` — the private management API: credential
-   policy shape, scope, loopback-only binding.
-8. `docs/POLICIES.md` and `docs/FUNCTION-SECURITY.md` — per-target policy
+7. `docs/POLICIES.md` and `docs/FUNCTION-SECURITY.md` — per-target policy
    support and the operator binding-grant process, needed whenever a
    deployment or verification step touches either.
 
@@ -76,36 +74,20 @@ by the operator.
 
 ## Hard limits — report these as gaps, never invent around them
 
-**These limits describe core `0.4.0-alpha.2`, the version this template pins in
-`package.json`.** Verify them against the runtime actually installed in
-`node_modules/@jimhoyd/urlcode/` before sizing or advising, and re-read this
-section when bumping that pin.
-
-Sizing is model-dependent at this pin. A route runs trusted and in-process
-unless it declares `sandbox: true`, so the ceiling for the default path is the
-`--max-in-flight` admission cap, **not** the worker-slot count. Only routes
-that opt into `sandbox: true` are bounded by the sandboxed worker pool. A
-project mixing both has two ceilings, and capacity guidance written for the
-all-sandboxed model does not transfer. Size from the installed runtime's own
-`docs/CAPACITY.md`, never from this summary alone.
-
-- No provider adapters, automatic TLS/DNS, distributed rate limiting, metrics
-  exporters or durable event delivery are included; these remain the
-  operator's own infrastructure.
+- Provider adapters exist with different capability limits; query
+  `urlcode capabilities --target NAME`. Automatic TLS/DNS, distributed rate
+  limiting, metrics exporters and durable delivery require operator infrastructure.
 - No orchestration, traffic switching or automated rollback; recovery is an
   explicit snapshot reload from a known-good artifact.
 - `verify-deployment` has no infrastructure access, uses no credential,
   follows no redirect and offers no `--insecure`. It cannot check anything a
   read-only HTTP probe cannot observe.
-- The private management API binds only `127.0.0.1`/`::1`; it is never meant
-  to be exposed through a public proxy or container port mapping, and browser
-  Origin requests are rejected regardless.
-- A management credentials policy is operator-owned, outside the application,
-  never in YAML or Git, at most 64 KiB, mode 600, at most 128 credentials with
-  explicit collection/action allowlists — no wildcards.
-- Sandbox concurrency, worker slots and execution deadlines are shared across
-  every programmable route in a snapshot; there is no per-route fairness or
-  reserved capacity, and awaiting a guest timer still occupies a slot.
+- Core has no durable store and no private management API of its own, and no
+  supported extension package provides stored short links.
+- Only `sandbox: true` routes share the sandbox worker slots and forced
+  execution deadlines. Trusted routes run in Node under HTTP admission limits;
+  their cooperative timeout cannot stop blocking JavaScript. A guest timer still
+  occupies a sandbox slot. Size both modes from `docs/CAPACITY.md`.
 - `throttle` and `agents` policy counters are per instance, not distributed;
   they are a second layer behind the edge, never a replacement for it.
 
@@ -115,10 +97,9 @@ responsibility that covers it instead of inventing a flag.
 
 ## Boundaries
 
-- Never generate or approve an operator binding grant, or a management
-  credentials policy, on the user's behalf. Both are the operator's own
-  reviewed decision; produce the shape and let them fill in and store the
-  real secret.
+- Never generate or approve an operator binding grant on the user's behalf.
+  That is the operator's own reviewed decision; produce the shape and let
+  them fill in and store the real secret.
 - Keep every credential, token and policy file out of source, examples and
   Git. A synthetic example value is fine; a real one is never committed.
 - Do not deploy, expose a service, rotate a credential, or run
