@@ -73,10 +73,8 @@ Two of them are conditional at this pin. `function`/`middleware` routes run
 therefore applies only to routes that declare `sandbox: true`; a route that
 does not declare it has none of those restrictions and is ordinary trusted
 code. Core also has no native `link` handler and no `dynamicLinks` flag at this
-pin; stored short links are the
-[urlcode-dynamic-link](https://github.com/jimhoyd-com/urlcode-dynamic-link)
-extension's job, and asking for either in YAML is a gap to report, not
-something to invent around.
+pin, and no supported extension package provides stored short links; asking for
+either in YAML is a gap to report, not something to invent around.
 
 - No YAML anchors, aliases, template interpolation or remote includes.
 - No recursive includes or glob discovery; includes are explicit.
