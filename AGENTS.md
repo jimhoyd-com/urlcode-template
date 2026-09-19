@@ -20,7 +20,7 @@ authentication; the runtime provides them. Read this file before changing anythi
 
 ## Ask the runtime through MCP first
 
-`.mcp.json` registers the read-only `urlcode mcp` server. When it is
+When present, `.mcp.json` registers the read-only `urlcode mcp` server. When it is
 available, prefer its tools over reading documents: `get_context`,
 `get_capability`, `get_schema`, `search_recipes`, `explain`, `get_manifest`.
 The CLI equivalents are the fallback: `urlcode context`, `urlcode capabilities NAME`,
@@ -29,25 +29,24 @@ The CLI equivalents are the fallback: `urlcode context`, `urlcode capabilities N
 
 ## What the runtime provides (this version)
 
-- Handlers, exactly one per route: `redirect`, `respond`, `page`, `static`, `download`, `function`, `proxy`, `conditional`.
-- Ordered `middleware` around any handler, declared in YAML, trusted by default.
+- Handlers, exactly one per route: `redirect`, `respond`, `page`, `static`, `download`, `function`, `link`, `proxy`, `conditional`, `extension`.
+- Ordered `middleware` around any handler, declared in YAML, run in the sandbox.
 - Validated inputs: `parameters`, `request.body` and `methods` on the route;
   functions receive validated `args`, never raw user input.
 - Policies, host-enforced and off by default: `agents`, `throttle`, `cache`, `security`, `compression`.
 - Site conventions under `site`, each generating one native route: `robots` (/robots.txt), `sitemap` (/sitemap.xml), `favicon` (/favicon.ico), `securityTxt` (/.well-known/security.txt), `llms` (/llms.txt).
 - Bindings: named `env` and `secrets` references resolved by the operator, never values in YAML.
 
-Never recreate any of these in a function; a missing one is a report, not an
-invitation to reimplement it.
+Never recreate any of these in a function. If a requirement seems to need one
+of them and it is missing, that is a report, not an invitation to reimplement.
 
-## Functions and middleware are trusted by default; sandbox is opt-in
+## Functions and middleware are sandboxed
 
-A route's `function`/`middleware` code runs trusted, in-process, with full
-Node/filesystem/`fetch` access, receiving only the declared/granted `args`
-and `env`/`secrets`. Add `sandbox: true` when code warrants isolation
-(untrusted input, an unreviewed contribution, an especially sensitive
-secret): that route then gets a text/JSON subset only, no Node/filesystem/
-outside imports — use `proxy`/a binding instead, and say why in `description`.
+Guest code runs in an isolated JavaScript engine with a fresh heap per call.
+It sees a text/JSON `Request`/`Response` subset, validated `args` and granted
+`env`. There is no `fetch`, no Node API, no filesystem, no timers and no
+imports outside the project. Do not write code that needs them; declare a
+`proxy` route or a binding instead and say why.
 
 ## Checks that count as evidence
 
@@ -57,9 +56,10 @@ urlcode test
 urlcode audit --expect-routes 2
 ```
 
-Run all three after every change, updating the route count deliberately and
-adding `tests/requests.json` fixtures for every new route (positive/negative,
-every active method, HEAD). No global install: use `node /path/to/urlcode/src/cli.ts`.
+Run all three after every change. Update the expected route count deliberately
+when you add or remove a route, and add fixtures to `tests/requests.json` for
+every new route (positive and negative cases, every active method, HEAD).
+Without a global install, invoke `node /path/to/urlcode/src/cli.ts` instead of `urlcode`.
 
 ## Rules
 
@@ -69,8 +69,8 @@ every active method, HEAD). No global install: use `node /path/to/urlcode/src/cl
   stop; the operator grants it outside this project, pinned to the revision.
 - Secrets stay out of the project: no keys, tokens or credentials in YAML,
   functions, fixtures, `.env` files that are not ignored, or commit messages.
-- Authentication is host processing: declare `auth` on the route, never build
-  login forms, sessions or password checks in functions.
+- Prefer supported authentication extensions and their documented configuration;
+  never invent an `auth` field or duplicate functionality they provide.
 - Validation, tests and the audit are the evidence. Local checks are not a
   deployment, a soak test or a security review; do not claim otherwise.
 
