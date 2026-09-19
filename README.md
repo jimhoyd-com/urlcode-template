@@ -40,8 +40,8 @@ npm run dev
 
 Requires Node.js 22.13+ and npm; CI covers Node 22/24 on Windows, macOS and Linux.
 No global install, runtime checkout, account, database or Docker required. npm
-installs URLCode from an HTTPS archive of a pinned public Git commit, with
-lockfile integrity verification; network access is needed during installation. The runtime has not been published to npm yet.
+installs the pinned `@jimhoyd/urlcode` version from the npm registry, with
+lockfile integrity verification; network access is needed during installation.
 With Make installed, `make dev` handles installation and startup for you.
 
 Open these URLs:
@@ -234,13 +234,13 @@ host; external bindings require a separate operator policy. Read the
 [security model](https://github.com/jimhoyd-com/urlcode/blob/main/docs/FUNCTION-SECURITY.md).
 Never commit credentials, tokens or session cookies in YAML headers.
 
-This pins the hardened alpha.8 local/self-hosted runtime. Review the
-[release-readiness gates](https://github.com/jimhoyd-com/urlcode/blob/f2a644908d002dffc482e77f5a33afcd0f978428/docs/RELEASE-READINESS.md) before deployment. Read the
+This template pins the `0.4.0-alpha.1` published local/self-hosted runtime. Review the
+[release-readiness gates](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.1/docs/RELEASE-READINESS.md) before deployment. Read the
 [operations guide](https://github.com/jimhoyd-com/urlcode/blob/main/docs/OPERATIONS.md)
 before deploying. Provider adapters and URLCode Cloud remain future work.
 
-The license is still undecided. Neither this template nor the runtime selects
-license terms yet; public availability does not resolve that decision.
+Both this template and the pinned runtime are Apache-2.0 licensed; see each
+repository's `LICENSE` file.
 
 ## YAML-first scaffolding
 
@@ -248,25 +248,29 @@ After adding references in YAML, run `npm run scaffold -- --dry-run` to preview
 missing files, then `npm run scaffold` to create them. Existing files stay intact.
 Function/middleware placeholders return 501 until implemented; binary assets and
 external bindings are reported for you to supply.
-[Full guide](https://github.com/jimhoyd-com/urlcode/blob/f2a644908d002dffc482e77f5a33afcd0f978428/docs/SCAFFOLDING.md).
+[Full guide](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.1/docs/SCAFFOLDING.md).
 
 ## Live-link opt-in
 
-The entry `urlcode.yaml` explicitly sets `dynamicLinks: false`. Change it to true
-before adding live `link` handlers and supply the operator store binding. Included
-route files cannot override this setting. Regular parameterized redirects,
-functions and middleware do not require it. `npm run routes` reports the setting.
+The entry `urlcode.yaml` omits `dynamicLinks`, so it defaults to `false`. Set
+`dynamicLinks: true` before adding live `link` handlers and supply the operator
+store binding. Included route files cannot override this setting. Regular
+parameterized redirects, functions and middleware do not require it. `npm run
+routes` reports the setting. In the current `0.4.0-alpha.1` pin, `link` and
+`dynamicLinks` are still native runtime features; a future core release is
+expected to extract them into a separate extension package, so re-check this
+section (and your pinned docs) before upgrading further.
 
 Live-link deployment supports separate bounded reader/writer pools through
 operator CLI options. SQLite remains single-host and requires a patched SQLite
 build bundled with Node; check `npm run doctor`.
-[Pool sizing and consistency](https://github.com/jimhoyd-com/urlcode/blob/f2a644908d002dffc482e77f5a33afcd0f978428/docs/DYNAMIC-LINKS.md#separate-reader-and-writer-pools).
+[Pool sizing and consistency](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.1/docs/DYNAMIC-LINKS.md#separate-reader-and-writer-pools).
 
 The pinned runtime includes security fixes for failed log collectors, management
 HTTP admission/timeouts, and metadata-only development watching. Review the
-[security audit and remaining gates](https://github.com/jimhoyd-com/urlcode/blob/f2a644908d002dffc482e77f5a33afcd0f978428/docs/SECURITY-AUDIT.md) before production use.
+[security audit and remaining gates](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.1/docs/SECURITY-AUDIT.md) before production use.
 
 The pinned runtime includes bounded configuration loading, loopback-only management,
 scoped/expiring/revocable operator credentials and atomic mutation audits. Read the
-[management security guide](https://github.com/jimhoyd-com/urlcode/blob/f2a644908d002dffc482e77f5a33afcd0f978428/docs/MANAGEMENT-SECURITY.md)
+[management security guide](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.1/docs/MANAGEMENT-SECURITY.md)
 before operating live links. Independent assessment and deployment acceptance remain open.
