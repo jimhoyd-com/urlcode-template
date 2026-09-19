@@ -154,9 +154,11 @@ export default async function headers(request, context, next) {
 ```
 
 Reuse middleware on other routes, return a response early, or share request-local
-values through `context.state`. Every chain shares the function sandbox and one
-deadline. The regular redirect keeps its native fast path without middleware.
-See [middleware semantics](https://github.com/jimhoyd-com/urlcode/blob/main/docs/MIDDLEWARE.md)
+values through `context.state`. Under the pinned `0.4.0-alpha.1` runtime every
+chain shares the function sandbox and one deadline; from core `0.4.0-alpha.2`
+middleware runs trusted and in-process by default like functions do, sharing the
+deadline but not a sandbox unless a route opts in with `sandbox: true`. The regular redirect keeps its native fast path without middleware.
+See [middleware semantics for this pin](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.1/docs/MIDDLEWARE.md)
 for ordering, native body limits, binding policy and explicit test requirements.
 
 ## Method defaults
@@ -227,11 +229,17 @@ checks, outgoing headers and native text/JSON responses in YAML. See the
 The runtime also supports [pages, files and downloads](https://github.com/jimhoyd-com/urlcode/blob/main/docs/ASSETS.md).
 These features need no extra example clutter in your starting project.
 
-Functions run in a sandbox with a documented text/JSON Request/Response API.
-They do not have Node, filesystem or network access. No example needs secrets.
+In the `0.4.0-alpha.1` runtime this template pins, functions run in a sandbox
+with a documented text/JSON Request/Response API. They do not have Node,
+filesystem or network access. That is a property of the pinned version, not a
+permanent one: core `0.4.0-alpha.2` changes the default so `function` and
+`middleware` routes run trusted and unsandboxed in-process, with `sandbox: true`
+as a per-route opt-in ([decision record](https://github.com/jimhoyd-com/urlcode/blob/main/docs/SPIKE-DEFAULT-TRUST-MODEL.md)).
+The `sandbox` field does not exist in `0.4.0-alpha.1`'s schema, so re-read this
+section against the new default before raising the pin. No example needs secrets.
 Keep any future secret values in ignored `.env.local` locally or injected by your
 host; external bindings require a separate operator policy. Read the
-[security model](https://github.com/jimhoyd-com/urlcode/blob/main/docs/FUNCTION-SECURITY.md).
+[security model for this pin](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.1/docs/FUNCTION-SECURITY.md).
 Never commit credentials, tokens or session cookies in YAML headers.
 
 This template pins the `0.4.0-alpha.1` published local/self-hosted runtime. Review the
