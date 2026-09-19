@@ -26,17 +26,12 @@ Documentation, schema and runtime must come from the **same revision**. Read fro
 the project's installed runtime (`node_modules/@jimhoyd/urlcode/`) or the
 checkout you are working in — never from memory of another version.
 
-1. `docs/AI-AUTHORING.md` — the authoring contract and the **capability matrix**
-   of what is available versus unavailable. Read this first and in full.
-2. `schemas/urlcode.schema.json` — the exact accepted structure.
-3. `docs/YAML-REFERENCE.md` and `docs/SPECIFICATION.md` — every field, and the
-   implemented semantics, defaults and sandbox API.
-4. `docs/YAML-GUIDE.md` and `examples/cookbook/` — recipes and runnable files.
-5. `docs/ROUTING.md`, `docs/HTTP.md`, `docs/MIDDLEWARE.md`, `docs/ASSETS.md` —
-   matching precedence, methods, composition, MIME and ranges.
-6. `docs/FUNCTION-SECURITY.md` — the sandbox and operator binding policy.
-
-`llms.txt` at the repository root is a compact index of all of the above.
+Start with `urlcode context --project <dir> --budget 4000`, then retrieve the
+capability, schema fragment, recipe or example relevant to the change. Use the
+read-only MCP equivalents when available. `llms.txt` is the index; read the
+matching task guide from `docs/` when a query needs more explanation.
+`docs/SPECIFICATION.md` and `schemas/urlcode.schema.json` resolve contract
+questions. Archived plans are historical, not valid YAML guidance.
 
 ## Workflow
 
@@ -44,15 +39,16 @@ checkout you are working in — never from memory of another version.
   tests and the pinned runtime version. Preserve the user's organization,
   naming and unrelated routes.
 - Choose exactly one handler per route — `function`, `redirect`, `respond`,
-  `page`, `static` or `download` — plus optional ordered middleware.
-  Prefer a native handler when code is unnecessary.
+  `page`, `static`, `download`, `conditional`, `proxy` or an `extension` mount
+  — plus optional ordered middleware. Prefer a native handler when code is
+  unnecessary.
 - Declare each path placeholder as a required string. Paths match whole
   segments: no regex, no greedy captures, no wildcard handlers.
 - Bind typed inputs through `args` or context. There is no `${...}`
   interpolation anywhere in the format.
 - Create every referenced module, page and asset **before** validating. All
-  paths resolve from the project root; functions and middleware use relative
-  ES-module imports only.
+  source paths resolve from the project root. Trusted modules can import Node built-ins and npm packages;
+  only `sandbox: true` modules are restricted to the relative snapshotted graph.
 - Write exact response fixtures for success and failure, covering every active
   method, middleware behavior, HEAD, and any range or cache semantics.
 - Follow `docs/BEST-PRACTICES.md` for layout and readability as the project grows.
@@ -62,29 +58,23 @@ checkout you are working in — never from memory of another version.
 The authoritative list is the capability matrix in `docs/AI-AUTHORING.md`. The
 mistakes that recur:
 
-**These limits describe core `0.4.0-alpha.2`, the version this template pins in
-`package.json`.** Verify them against the runtime actually installed in
-`node_modules/@jimhoyd/urlcode/` before relying on any of them, and re-read this
-section when bumping that pin.
-
-Two of them are conditional at this pin. `function`/`middleware` routes run
-**trusted and unsandboxed by default** — full Node, npm, filesystem and
-`fetch` — with `sandbox: true` as a per-route opt-in. The sandbox limit below
-therefore applies only to routes that declare `sandbox: true`; a route that
-does not declare it has none of those restrictions and is ordinary trusted
-code. Core also has no native `link` handler and no `dynamicLinks` flag at this
-pin, and no supported extension package provides stored short links; asking for
-either in YAML is a gap to report, not something to invent around.
-
 - No YAML anchors, aliases, template interpolation or remote includes.
 - No recursive includes or glob discovery; includes are explicit.
 - No regex, optional or greedy route segments, and no host-based routing.
-- Under `sandbox: true`, execution is text/JSON `Request`/`Response` only:
+- `function`/`middleware` routes run trusted and unsandboxed by default: full
+  Node, npm, filesystem and `fetch` access, in-process, like any other project
+  code. `sandbox: true` opts a route into isolation — reach for it when that
+  route's own code warrants it (unreviewed or third-party code, a secret whose
+  blast radius matters, complex logic), not reflexively on every route and
+  never merely because it handles request data -- that is untrusted in both
+  modes and must be validated either way. A
+  `sandbox: true` route gets a text/JSON `Request`/`Response` sandbox only:
   **no** `fetch`, Node or npm APIs, filesystem, WebSocket, streaming or crypto
-  API. Without `sandbox: true` the route is trusted and has all of them.
+  API.
 - No global middleware, Express compatibility or automatic auth.
 - `policies` accepts only `throttle`, `agents`, `security`, `compression` and
-  `cache`, every key off unless declared; `hardened` is the only built-in
+  `cache`, plus registered extension requirements under `extensions`;
+  the built-in policies are off unless declared; `hardened` is the only built-in
   profile. Check the per-target table in `docs/POLICIES.md` before declaring
   one for a serverless or Cloudflare deployment — an unsupported policy refuses
   activation rather than degrading.
@@ -92,6 +82,9 @@ either in YAML is a gap to report, not something to invent around.
   only and off unless declared; a declared route at the same path wins. Its
   generated routes count toward `--expect-routes`, and `site.sitemap` needs
   `--origin` on every command that activates the project.
+- There is no native `link` handler or `dynamicLinks` project flag, and no
+  supported extension package provides one; report stored short links as a gap,
+  never invent a `link` field.
 - Infrastructure (proxy ranges, storage URLs, vendor rule identifiers) is an
   operator flag, never route YAML.
 
