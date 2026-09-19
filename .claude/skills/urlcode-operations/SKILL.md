@@ -1,6 +1,6 @@
 ---
 name: urlcode-operations
-description: Deploy, verify, monitor and operate a URLCode project — process/container deployment, release readiness, verifying a live deployment against the project, capacity/audit/benchmark, observability, DDoS/overload resilience, and private management (grants, live-link credentials). Use when the user asks to deploy, check readiness, verify a running deployment, size/benchmark a project, monitor it, plan for overload, or manage live links/bindings. Reports operational limits and unimplemented capabilities as gaps instead of inventing mitigations.
+description: Deploy, verify, monitor and operate a URLCode project — process/container deployment, release readiness, verifying a live deployment against the project, capacity/audit/benchmark, observability, DDoS/overload resilience, and private management (grants). Use when the user asks to deploy, check readiness, verify a running deployment, size/benchmark a project, monitor it, plan for overload, or manage bindings. Reports operational limits and unimplemented capabilities as gaps instead of inventing mitigations.
 ---
 
 # Operating a URLCode deployment
@@ -71,8 +71,8 @@ urlcode verify-deployment --project ./my-links --target https://links.example \
 Run the actual commands and report actual results, never "should work" or
 "should be reachable". `verify-deployment` needs a real target; do not
 simulate its output. In a runtime checkout, substitute `node src/cli.ts` for
-`urlcode`. Pass `--policy`/`--link-store` where a snapshot needs bindings
-already reviewed by the operator.
+`urlcode`. Pass `--policy` where a snapshot needs bindings already reviewed
+by the operator.
 
 ## Hard limits — report these as gaps, never invent around them
 

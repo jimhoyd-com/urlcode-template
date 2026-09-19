@@ -137,8 +137,7 @@ the expected count stays **2**. More examples are in the
 supported. Exact routes win before parameter routes, then static mounts.
 `dev` automatically swaps validated snapshots after YAML edits; production
 `serve` uses a fixed snapshot. See [matching and dynamic links](https://github.com/jimhoyd-com/urlcode/blob/main/docs/ROUTING.md)
-for wildcard limits and precedence. Optional [stored links](https://github.com/jimhoyd-com/urlcode/blob/main/docs/DYNAMIC-LINKS.md)
-now support live creation/update/deletion without reloading YAML.
+for wildcard limits and precedence.
 
 ## Middleware
 
@@ -212,14 +211,19 @@ for invalid-input, HEAD/cache/range, expiry, reload, security, load, deployment
 and rollback checks. Remote destination health, DNS/TLS and sustained soak
 checks remain separate work; a local passing audit is not production certification.
 
-## Optional live short links
+## Short links are not a built-in
 
 The starter's two examples still work without a database. The runtime itself no
 longer carries a native `link` handler: `0.4.0-alpha.2` removed it, along with
 the top-level `dynamicLinks` switch, in favour of a mount-based extension. That
-extension (`urlcode-dynamic-link`) has since been retired and unpublished, so
-there is no supported package for live short links today — an application that
-needs them owns that storage itself.
+extension has since been retired and unpublished, so no supported package
+provides stored short links today — an application that needs them owns that
+storage itself. Nothing in this template depends on them, so there is no opt-in
+to set; regular parameterized redirects, functions and middleware never required
+them. Store sizing, bounded reader/writer pools and the single-host SQLite
+caveat belong to whatever store such an application brings itself: read that
+store's own guidance, and check `npm run doctor` for the patched SQLite build
+Node needs.
 
 ## Grow from here
 
@@ -239,9 +243,16 @@ or network access, which is what every runtime before `0.4.0-alpha.2` gave
 every such route unconditionally.
 
 Treat a `function` or `middleware` route as ordinary trusted code you are
-responsible for reviewing. Add `sandbox: true` to any route that handles input
-or executes code you would not otherwise trust with that access. The example
-routes in this template are trusted deliberately and need no secrets.
+responsible for reviewing. "Trusted" describes the authorship of the code, not
+the request. Add `sandbox: true` when a route runs code you have not reviewed or
+that came from a third party, when it holds a secret whose blast radius matters,
+or when the logic is complex enough that limiting a bug's reach is the margin
+you want. The price is real: a sandboxed route gives up `fetch`, Node builtins,
+the filesystem and npm, and occupies worker-pool capacity, so do not add it
+reflexively. Request data — path, query, headers, cookies, body, webhooks — is
+untrusted on **both** paths and must always be validated; `sandbox: true` is
+neither input validation nor authentication. The example routes in this template
+are trusted deliberately and need no secrets.
 Keep any future secret values in ignored `.env.local` locally or injected by your
 host; external bindings require a separate operator policy. Read the
 [security model for this pin](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.2/docs/FUNCTION-SECURITY.md).
@@ -263,18 +274,7 @@ Function/middleware placeholders return 501 until implemented; binary assets and
 external bindings are reported for you to supply.
 [Full guide](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.2/docs/SCAFFOLDING.md).
 
-## Live links
-
-The `0.4.0-alpha.2` runtime this template pins has no native `link` handler and
-no top-level `dynamicLinks` switch; both were removed in favour of a mount-based
-extension, which has itself since been retired and unpublished. Nothing in this
-template depends on them, so there is no opt-in to set. Regular parameterized
-redirects, functions and middleware never required them.
-
-Store sizing, bounded reader/writer pools and the single-host SQLite caveat
-belong to whatever store an application brings itself; read that store's own
-guidance before deploying live links, and
-check `npm run doctor` for the patched SQLite build Node needs.
+## Security notes for the pinned runtime
 
 The pinned runtime includes security fixes for failed log collectors, management
 HTTP admission/timeouts, and metadata-only development watching. Review the
@@ -283,4 +283,4 @@ HTTP admission/timeouts, and metadata-only development watching. Review the
 The pinned runtime includes bounded configuration loading, loopback-only management,
 scoped/expiring/revocable operator credentials and atomic mutation audits. Read the
 [management security guide](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.2/docs/MANAGEMENT-SECURITY.md)
-before operating live links. Independent assessment and deployment acceptance remain open.
+before operating the management endpoint. Independent assessment and deployment acceptance remain open.

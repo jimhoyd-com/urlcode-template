@@ -29,8 +29,9 @@ The CLI equivalents are the fallback: `urlcode context`, `urlcode capabilities N
 
 ## What the runtime provides (this version)
 
-- Handlers, exactly one per route: `redirect`, `respond`, `page`, `static`, `download`, `function`, `link`, `proxy`, `conditional`, `extension`.
-- Ordered `middleware` around any handler, declared in YAML, run in the sandbox.
+- Handlers, exactly one per route: `redirect`, `respond`, `page`, `static`, `download`, `function`, `proxy`, `conditional`, `extension`.
+- Ordered `middleware` around any handler, declared in YAML, running trusted
+  and in-process unless the route declares `sandbox: true`.
 - Validated inputs: `parameters`, `request.body` and `methods` on the route;
   functions receive validated `args`, never raw user input.
 - Policies, host-enforced and off by default: `agents`, `throttle`, `cache`, `security`, `compression`.
@@ -40,13 +41,27 @@ The CLI equivalents are the fallback: `urlcode context`, `urlcode capabilities N
 Never recreate any of these in a function. If a requirement seems to need one
 of them and it is missing, that is a report, not an invitation to reimplement.
 
-## Functions and middleware are sandboxed
+## Functions and middleware run trusted by default
 
-Guest code runs in an isolated JavaScript engine with a fresh heap per call.
-It sees a text/JSON `Request`/`Response` subset, validated `args` and granted
-`env`. There is no `fetch`, no Node API, no filesystem, no timers and no
-imports outside the project. Do not write code that needs them; declare a
-`proxy` route or a binding instead and say why.
+Since core `0.4.0-alpha.2`, the version this project pins, `function` and
+`middleware` routes run **trusted and in-process** by default: ordinary project
+code with full Node access. `fetch`, the filesystem, timers and npm packages all
+work. Write the code the requirement needs; do not refuse it or route it through
+a `proxy` on the assumption that it is sandboxed.
+
+`sandbox: true` is a per-route opt-in that moves that one route into an isolated
+QuickJS/WASM worker, with a fresh heap per call. That route then sees only a
+text/JSON `Request`/`Response` subset, validated `args` and granted `env` — no
+`fetch`, no Node builtins, no filesystem, no npm, and relative ES-module imports
+only. Do not add it reflexively: it costs worker-pool capacity and every one of
+those capabilities. It is warranted when the route runs unreviewed or
+third-party code, when it holds a secret whose blast radius matters, or when the
+logic is complex enough that limiting a bug's reach is the margin you want.
+
+"Trusted" describes the **authorship of the code** — first-party and reviewed —
+not the request. All request data (path, query, headers, cookies, body,
+webhooks) is untrusted in **both** modes and must always be validated.
+`sandbox: true` is not input validation and not authentication.
 
 ## Checks that count as evidence
 
