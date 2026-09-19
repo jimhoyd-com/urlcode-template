@@ -76,16 +76,18 @@ already reviewed by the operator.
 
 ## Hard limits — report these as gaps, never invent around them
 
-**These limits describe core `0.4.0-alpha.1`, the version this template pins in
+**These limits describe core `0.4.0-alpha.2`, the version this template pins in
 `package.json`.** Verify them against the runtime actually installed in
 `node_modules/@jimhoyd/urlcode/` before sizing or advising, and re-read this
-section when bumping that pin. Capacity guidance below assumes every
-programmable route runs in the sandboxed worker pool, which is true at this pin.
-On core's `main`, routes run trusted and in-process unless they declare
-`sandbox: true`, and the trusted path's ceiling is the `--max-in-flight`
-admission cap rather than the worker-slot count — a materially different sizing
-model. Size from the installed runtime's own `docs/CAPACITY.md`, never from this
-summary alone.
+section when bumping that pin.
+
+Sizing is model-dependent at this pin. A route runs trusted and in-process
+unless it declares `sandbox: true`, so the ceiling for the default path is the
+`--max-in-flight` admission cap, **not** the worker-slot count. Only routes
+that opt into `sandbox: true` are bounded by the sandboxed worker pool. A
+project mixing both has two ceilings, and capacity guidance written for the
+all-sandboxed model does not transfer. Size from the installed runtime's own
+`docs/CAPACITY.md`, never from this summary alone.
 
 - No provider adapters, automatic TLS/DNS, distributed rate limiting, metrics
   exporters or durable event delivery are included; these remain the

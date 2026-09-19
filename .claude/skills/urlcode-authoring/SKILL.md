@@ -62,21 +62,28 @@ checkout you are working in — never from memory of another version.
 The authoritative list is the capability matrix in `docs/AI-AUTHORING.md`. The
 mistakes that recur:
 
-**These limits describe core `0.4.0-alpha.1`, the version this template pins in
+**These limits describe core `0.4.0-alpha.2`, the version this template pins in
 `package.json`.** Verify them against the runtime actually installed in
 `node_modules/@jimhoyd/urlcode/` before relying on any of them, and re-read this
-section when bumping that pin: core's `main` has since changed the execution
-model — `function`/`middleware` routes there run trusted and unsandboxed by
-default (full Node, npm, filesystem and `fetch`), with `sandbox: true` as a
-per-route opt-in into the isolation described below — and has removed the native
-`link` handler and `dynamicLinks` flag. None of that is in `0.4.0-alpha.1`, so
-the limits below are correct here and wrong the moment the pin moves past it.
+section when bumping that pin.
+
+Two of them are conditional at this pin. `function`/`middleware` routes run
+**trusted and unsandboxed by default** — full Node, npm, filesystem and
+`fetch` — with `sandbox: true` as a per-route opt-in. The sandbox limit below
+therefore applies only to routes that declare `sandbox: true`; a route that
+does not declare it has none of those restrictions and is ordinary trusted
+code. Core also has no native `link` handler and no `dynamicLinks` flag at this
+pin; stored short links are the
+[urlcode-dynamic-link](https://github.com/jimhoyd-com/urlcode-dynamic-link)
+extension's job, and asking for either in YAML is a gap to report, not
+something to invent around.
 
 - No YAML anchors, aliases, template interpolation or remote includes.
 - No recursive includes or glob discovery; includes are explicit.
 - No regex, optional or greedy route segments, and no host-based routing.
-- The sandbox is text/JSON `Request`/`Response` only: **no** `fetch`, Node or
-  npm APIs, filesystem, WebSocket, streaming or crypto API.
+- Under `sandbox: true`, execution is text/JSON `Request`/`Response` only:
+  **no** `fetch`, Node or npm APIs, filesystem, WebSocket, streaming or crypto
+  API. Without `sandbox: true` the route is trusted and has all of them.
 - No global middleware, Express compatibility or automatic auth.
 - `policies` accepts only `throttle`, `agents`, `security`, `compression` and
   `cache`, every key off unless declared; `hardened` is the only built-in

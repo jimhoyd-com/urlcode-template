@@ -154,11 +154,12 @@ export default async function headers(request, context, next) {
 ```
 
 Reuse middleware on other routes, return a response early, or share request-local
-values through `context.state`. Under the pinned `0.4.0-alpha.1` runtime every
-chain shares the function sandbox and one deadline; from core `0.4.0-alpha.2`
-middleware runs trusted and in-process by default like functions do, sharing the
-deadline but not a sandbox unless a route opts in with `sandbox: true`. The regular redirect keeps its native fast path without middleware.
-See [middleware semantics for this pin](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.1/docs/MIDDLEWARE.md)
+values through `context.state`. Under the pinned `0.4.0-alpha.2` runtime
+middleware runs trusted and in-process by default, exactly as functions do: a
+chain shares one deadline, but not a sandbox unless the route opts in with
+`sandbox: true`. The regular redirect keeps its native fast path without
+middleware.
+See [middleware semantics for this pin](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.2/docs/MIDDLEWARE.md)
 for ordering, native body limits, binding policy and explicit test requirements.
 
 ## Method defaults
@@ -214,12 +215,13 @@ checks remain separate work; a local passing audit is not production certificati
 ## Optional live short links
 
 The starter's two examples still work without a database. When your application
-needs visitors to create short links, add a native `link` route and explicitly
-bind an external SQLite store. Your trusted backend can call a separate,
-token-protected management API; never put that token in browser code. Committed
-record changes become visible without restarting the public server. See the
-[complete setup and API](https://github.com/jimhoyd-com/urlcode/blob/main/docs/DYNAMIC-LINKS.md).
-The first adapter supports one host, including multiple local processes.
+needs visitors to create short links, add the
+[urlcode-dynamic-link](https://github.com/jimhoyd-com/urlcode-dynamic-link)
+extension and bind its store. The runtime itself no longer carries a native
+`link` handler: `0.4.0-alpha.2` removed it, along with the top-level
+`dynamicLinks` switch, in favour of that mount-based extension. Your trusted
+backend can call its token-protected management API; never put that token in
+browser code.
 
 ## Grow from here
 
@@ -229,21 +231,26 @@ checks, outgoing headers and native text/JSON responses in YAML. See the
 The runtime also supports [pages, files and downloads](https://github.com/jimhoyd-com/urlcode/blob/main/docs/ASSETS.md).
 These features need no extra example clutter in your starting project.
 
-In the `0.4.0-alpha.1` runtime this template pins, functions run in a sandbox
-with a documented text/JSON Request/Response API. They do not have Node,
-filesystem or network access. That is a property of the pinned version, not a
-permanent one: core `0.4.0-alpha.2` changes the default so `function` and
-`middleware` routes run trusted and unsandboxed in-process, with `sandbox: true`
-as a per-route opt-in ([decision record](https://github.com/jimhoyd-com/urlcode/blob/main/docs/SPIKE-DEFAULT-TRUST-MODEL.md)).
-The `sandbox` field does not exist in `0.4.0-alpha.1`'s schema, so re-read this
-section against the new default before raising the pin. No example needs secrets.
+In the `0.4.0-alpha.2` runtime this template pins, `function` and `middleware`
+routes run **trusted and unsandboxed** in the host process, with full Node,
+filesystem and network access, exactly like any other project code
+([decision record](https://github.com/jimhoyd-com/urlcode/blob/main/docs/SPIKE-DEFAULT-TRUST-MODEL.md)).
+Sandboxing is an explicit per-route opt-in: add `sandbox: true` to a route and
+it gets the documented text/JSON Request/Response API with no Node, filesystem
+or network access, which is what every runtime before `0.4.0-alpha.2` gave
+every such route unconditionally.
+
+Treat a `function` or `middleware` route as ordinary trusted code you are
+responsible for reviewing. Add `sandbox: true` to any route that handles input
+or executes code you would not otherwise trust with that access. The example
+routes in this template are trusted deliberately and need no secrets.
 Keep any future secret values in ignored `.env.local` locally or injected by your
 host; external bindings require a separate operator policy. Read the
-[security model for this pin](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.1/docs/FUNCTION-SECURITY.md).
+[security model for this pin](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.2/docs/FUNCTION-SECURITY.md).
 Never commit credentials, tokens or session cookies in YAML headers.
 
-This template pins the `0.4.0-alpha.1` published local/self-hosted runtime. Review the
-[release-readiness gates](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.1/docs/RELEASE-READINESS.md) before deployment. Read the
+This template pins the `0.4.0-alpha.2` published local/self-hosted runtime. Review the
+[release-readiness gates](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.2/docs/RELEASE-READINESS.md) before deployment. Read the
 [operations guide](https://github.com/jimhoyd-com/urlcode/blob/main/docs/OPERATIONS.md)
 before deploying. Provider adapters and URLCode Cloud remain future work.
 
@@ -256,29 +263,26 @@ After adding references in YAML, run `npm run scaffold -- --dry-run` to preview
 missing files, then `npm run scaffold` to create them. Existing files stay intact.
 Function/middleware placeholders return 501 until implemented; binary assets and
 external bindings are reported for you to supply.
-[Full guide](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.1/docs/SCAFFOLDING.md).
+[Full guide](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.2/docs/SCAFFOLDING.md).
 
-## Live-link opt-in
+## Live links
 
-The entry `urlcode.yaml` omits `dynamicLinks`, so it defaults to `false`. Set
-`dynamicLinks: true` before adding live `link` handlers and supply the operator
-store binding. Included route files cannot override this setting. Regular
-parameterized redirects, functions and middleware do not require it. `npm run
-routes` reports the setting. In the current `0.4.0-alpha.1` pin, `link` and
-`dynamicLinks` are still native runtime features; a future core release is
-expected to extract them into a separate extension package, so re-check this
-section (and your pinned docs) before upgrading further.
+The `0.4.0-alpha.2` runtime this template pins has no native `link` handler and
+no top-level `dynamicLinks` switch; both were removed in favour of the
+[urlcode-dynamic-link](https://github.com/jimhoyd-com/urlcode-dynamic-link)
+extension. Nothing in this template depends on them, so there is no opt-in to
+set. Regular parameterized redirects, functions and middleware never required
+them.
 
-Live-link deployment supports separate bounded reader/writer pools through
-operator CLI options. SQLite remains single-host and requires a patched SQLite
-build bundled with Node; check `npm run doctor`.
-[Pool sizing and consistency](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.1/docs/DYNAMIC-LINKS.md#separate-reader-and-writer-pools).
+Store sizing, bounded reader/writer pools and the single-host SQLite caveat now
+belong to that extension; read its README before deploying live links, and
+check `npm run doctor` for the patched SQLite build Node needs.
 
 The pinned runtime includes security fixes for failed log collectors, management
 HTTP admission/timeouts, and metadata-only development watching. Review the
-[security audit and remaining gates](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.1/docs/SECURITY-AUDIT.md) before production use.
+[security audit and remaining gates](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.2/docs/SECURITY-AUDIT.md) before production use.
 
 The pinned runtime includes bounded configuration loading, loopback-only management,
 scoped/expiring/revocable operator credentials and atomic mutation audits. Read the
-[management security guide](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.1/docs/MANAGEMENT-SECURITY.md)
+[management security guide](https://github.com/jimhoyd-com/urlcode/blob/v0.4.0-alpha.2/docs/MANAGEMENT-SECURITY.md)
 before operating live links. Independent assessment and deployment acceptance remain open.
