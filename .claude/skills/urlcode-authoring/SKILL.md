@@ -53,6 +53,16 @@ checkout you are working in — never from memory of another version.
 The authoritative list is the capability matrix in `docs/AI-AUTHORING.md`. The
 mistakes that recur:
 
+**These limits describe core `0.4.0-alpha.1`, the version this template pins in
+`package.json`.** Verify them against the runtime actually installed in
+`node_modules/@jimhoyd/urlcode/` before relying on any of them, and re-read this
+section when bumping that pin: core's `main` has since changed the execution
+model — `function`/`middleware` routes there run trusted and unsandboxed by
+default (full Node, npm, filesystem and `fetch`), with `sandbox: true` as a
+per-route opt-in into the isolation described below — and has removed the native
+`link` handler and `dynamicLinks` flag. None of that is in `0.4.0-alpha.1`, so
+the limits below are correct here and wrong the moment the pin moves past it.
+
 - No YAML anchors, aliases, template interpolation or remote includes.
 - No recursive includes or glob discovery; includes are explicit.
 - No regex, optional or greedy route segments, and no host-based routing.
