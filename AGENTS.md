@@ -29,39 +29,25 @@ The CLI equivalents are the fallback: `urlcode context`, `urlcode capabilities N
 
 ## What the runtime provides (this version)
 
-- Handlers, exactly one per route: `redirect`, `respond`, `page`, `static`, `download`, `function`, `proxy`, `conditional`, `extension`.
-- Ordered `middleware` around any handler, declared in YAML, running trusted
-  and in-process unless the route declares `sandbox: true`.
+- Handlers, exactly one per route: `redirect`, `respond`, `page`, `static`, `download`, `function`, `proxy`, `conditional`.
+- Ordered `middleware` around any handler, declared in YAML, trusted by default.
 - Validated inputs: `parameters`, `request.body` and `methods` on the route;
   functions receive validated `args`, never raw user input.
 - Policies, host-enforced and off by default: `agents`, `throttle`, `cache`, `security`, `compression`.
 - Site conventions under `site`, each generating one native route: `robots` (/robots.txt), `sitemap` (/sitemap.xml), `favicon` (/favicon.ico), `securityTxt` (/.well-known/security.txt), `llms` (/llms.txt).
 - Bindings: named `env` and `secrets` references resolved by the operator, never values in YAML.
 
-Never recreate any of these in a function. If a requirement seems to need one
-of them and it is missing, that is a report, not an invitation to reimplement.
+Never recreate any of these in a function; a missing one is a report, not an
+invitation to reimplement it.
 
-## Functions and middleware run trusted by default
+## Functions and middleware are trusted by default; sandbox is opt-in
 
-Since core `0.4.0-alpha.2`, the version this project pins, `function` and
-`middleware` routes run **trusted and in-process** by default: ordinary project
-code with full Node access. `fetch`, the filesystem, timers and npm packages all
-work. Write the code the requirement needs; do not refuse it or route it through
-a `proxy` on the assumption that it is sandboxed.
-
-`sandbox: true` is a per-route opt-in that moves that one route into an isolated
-QuickJS/WASM worker, with a fresh heap per call. That route then sees only a
-text/JSON `Request`/`Response` subset, validated `args` and granted `env` — no
-`fetch`, no Node builtins, no filesystem, no npm, and relative ES-module imports
-only. Do not add it reflexively: it costs worker-pool capacity and every one of
-those capabilities. It is warranted when the route runs unreviewed or
-third-party code, when it holds a secret whose blast radius matters, or when the
-logic is complex enough that limiting a bug's reach is the margin you want.
-
-"Trusted" describes the **authorship of the code** — first-party and reviewed —
-not the request. All request data (path, query, headers, cookies, body,
-webhooks) is untrusted in **both** modes and must always be validated.
-`sandbox: true` is not input validation and not authentication.
+A route's `function`/`middleware` runs trusted, in-process, with full
+Node/filesystem/`fetch` access, given only declared `args`/`env`/`secrets`. Add
+`sandbox: true` when that code warrants isolation (unreviewed code, a sensitive
+secret, complex logic) — not merely for untrusted input, which both modes share.
+A `sandbox: true` route gets a text/JSON subset only: use `proxy`/a binding, and
+say why in `sandboxReason`.
 
 ## Checks that count as evidence
 
@@ -71,10 +57,9 @@ urlcode test
 urlcode audit --expect-routes 2
 ```
 
-Run all three after every change. Update the expected route count deliberately
-when you add or remove a route, and add fixtures to `tests/requests.json` for
-every new route (positive and negative cases, every active method, HEAD).
-Without a global install, invoke `node /path/to/urlcode/src/cli.ts` instead of `urlcode`.
+Run all three after every change, updating the route count deliberately and
+adding `tests/requests.json` fixtures for every new route (positive/negative,
+every active method, HEAD). No global install: use `node /path/to/urlcode/src/cli.ts`.
 
 ## Rules
 
@@ -84,8 +69,8 @@ Without a global install, invoke `node /path/to/urlcode/src/cli.ts` instead of `
   stop; the operator grants it outside this project, pinned to the revision.
 - Secrets stay out of the project: no keys, tokens or credentials in YAML,
   functions, fixtures, `.env` files that are not ignored, or commit messages.
-- Prefer supported authentication extensions and their documented configuration;
-  never invent an `auth` field or duplicate functionality they provide.
+- Protect a route with `auth: true`/`auth: { role: admin }` where an `auth`
+  extension is declared; `cache` likewise expands to `policies.cache`.
 - Validation, tests and the audit are the evidence. Local checks are not a
   deployment, a soak test or a security review; do not claim otherwise.
 
