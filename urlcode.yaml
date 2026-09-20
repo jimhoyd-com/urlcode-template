@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/jimhoyd-com/urlcode/v0.4.0-alpha.2/schemas/urlcode.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/jimhoyd-com/urlcode/v0.4.0-alpha.3/schemas/urlcode.schema.json
 # Organize files however you like; list their paths from this project root.
 version: "1"
 includes:
