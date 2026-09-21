@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/jimhoyd-com/urlcode/v0.4.1/schemas/urlcode.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/jimhoyd-com/urlcode/v0.4.7/schemas/urlcode.schema.json
 version: "1"
 routes:
   # A regular redirect needs no custom code.

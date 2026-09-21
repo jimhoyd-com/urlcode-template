@@ -18,6 +18,6 @@
     "scaffold": "urlcode scaffold"
   },
   "dependencies": {
-    "@jimhoyd/urlcode": "0.4.1"
+    "@jimhoyd/urlcode": "0.4.7"
   }
 }

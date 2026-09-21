@@ -153,12 +153,12 @@ export default async function headers(request, context, next) {
 ```
 
 Reuse middleware on other routes, return a response early, or share request-local
-values through `context.state`. Under the pinned `0.4.1` runtime
+values through `context.state`. Under the pinned `0.4.7` runtime
 middleware runs trusted and in-process by default, exactly as functions do: a
 chain shares one deadline, but not a sandbox unless the route opts in with
 `sandbox: true`. The regular redirect keeps its native fast path without
 middleware.
-See [middleware semantics for this pin](https://github.com/jimhoyd-com/urlcode/blob/v0.4.1/docs/MIDDLEWARE.md)
+See [middleware semantics for this pin](https://github.com/jimhoyd-com/urlcode/blob/v0.4.7/docs/MIDDLEWARE.md)
 for ordering, native body limits, binding policy and explicit test requirements.
 
 ## Method defaults
@@ -233,7 +233,7 @@ checks, outgoing headers and native text/JSON responses in YAML. See the
 The runtime also supports [pages, files and downloads](https://github.com/jimhoyd-com/urlcode/blob/main/docs/ASSETS.md).
 These features need no extra example clutter in your starting project.
 
-In the `0.4.1` runtime this template pins, `function` and `middleware`
+In the `0.4.7` runtime this template pins, `function` and `middleware`
 routes run **trusted and unsandboxed** in the host process, with full Node,
 filesystem and network access, exactly like any other project code
 ([decision record](https://github.com/jimhoyd-com/urlcode/blob/main/docs/SPIKE-DEFAULT-TRUST-MODEL.md)).
@@ -255,11 +255,11 @@ neither input validation nor authentication. The example routes in this template
 are trusted deliberately and need no secrets.
 Keep any future secret values in ignored `.env.local` locally or injected by your
 host; external bindings require a separate operator policy. Read the
-[security model for this pin](https://github.com/jimhoyd-com/urlcode/blob/v0.4.1/docs/FUNCTION-SECURITY.md).
+[security model for this pin](https://github.com/jimhoyd-com/urlcode/blob/v0.4.7/docs/FUNCTION-SECURITY.md).
 Never commit credentials, tokens or session cookies in YAML headers.
 
-This template pins the `0.4.1` published local/self-hosted runtime. Review the
-[release-readiness gates](https://github.com/jimhoyd-com/urlcode/blob/v0.4.1/docs/RELEASE-READINESS.md) before deployment. Read the
+This template pins the `0.4.7` published local/self-hosted runtime. Review the
+[release-readiness gates](https://github.com/jimhoyd-com/urlcode/blob/v0.4.7/docs/RELEASE-READINESS.md) before deployment. Read the
 [operations guide](https://github.com/jimhoyd-com/urlcode/blob/main/docs/OPERATIONS.md)
 before deploying. Provider adapters and URLCode Cloud remain future work.
 
@@ -272,15 +272,15 @@ After adding references in YAML, run `npm run scaffold -- --dry-run` to preview
 missing files, then `npm run scaffold` to create them. Existing files stay intact.
 Function/middleware placeholders return 501 until implemented; binary assets and
 external bindings are reported for you to supply.
-[Full guide](https://github.com/jimhoyd-com/urlcode/blob/v0.4.1/docs/SCAFFOLDING.md).
+[Full guide](https://github.com/jimhoyd-com/urlcode/blob/v0.4.7/docs/SCAFFOLDING.md).
 
 ## Security notes for the pinned runtime
 
 The pinned runtime includes security fixes for failed log collectors, management
 HTTP admission/timeouts, and metadata-only development watching. Review the
-[security audit and remaining gates](https://github.com/jimhoyd-com/urlcode/blob/v0.4.1/docs/SECURITY-AUDIT.md) before production use.
+[security audit and remaining gates](https://github.com/jimhoyd-com/urlcode/blob/v0.4.7/docs/SECURITY-AUDIT.md) before production use.
 
 The pinned runtime includes bounded configuration loading, loopback-only management,
 scoped/expiring/revocable operator credentials and atomic mutation audits. Read the
-[management security guide](https://github.com/jimhoyd-com/urlcode/blob/v0.4.1/docs/MANAGEMENT-SECURITY.md)
+[management security guide](https://github.com/jimhoyd-com/urlcode/blob/v0.4.7/docs/MANAGEMENT-SECURITY.md)
 before operating the management endpoint. Independent assessment and deployment acceptance remain open.
