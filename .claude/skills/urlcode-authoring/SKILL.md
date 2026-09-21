@@ -18,7 +18,9 @@ is to author only what the pinned revision implements and then prove it.
 Check the installed version's primitives, YAML configuration, policies, supported
 extensions and recipes/templates before writing a custom function or middleware.
 Keep necessary custom code focused and report the capability gap; never invent
-fields or bypass target limits or operator grants. See `docs/PROJECT-DIRECTION.md` in the installed runtime.
+fields or bypass target limits or operator grants. In a source checkout, see
+`docs/PROJECT-DIRECTION.md`; in an npm installation, search the matching heading
+in `llms-full.txt`.
 
 ## Read the contract before writing YAML
 
@@ -26,12 +28,33 @@ Documentation, schema and runtime must come from the **same revision**. Read fro
 the project's installed runtime (`node_modules/@jimhoyd/urlcode/`) or the
 checkout you are working in — never from memory of another version.
 
-Start with `urlcode context --project <dir> --budget 4000`, then retrieve the
-capability, schema fragment, recipe or example relevant to the change. Use the
-read-only MCP equivalents when available. `llms.txt` is the index; read the
-matching task guide from `docs/` when a query needs more explanation.
-`docs/SPECIFICATION.md` and `schemas/urlcode.schema.json` resolve contract
-questions. Archived plans are historical, not valid YAML guidance.
+Make one bounded query first: MCP `get_context` when the `urlcode` server is
+registered, otherwise `urlcode context --project <dir>` (add `--budget 4000`
+when the project is large). It is a compact summary, constraints and exact
+commands, not a schema dump. Then retrieve only what the change needs:
+`urlcode capabilities NAME` (`get_capability`, for its limits), `get_schema`,
+`recipes search TEXT` (`search_recipes`), `explain` and, when the operator
+supplies a host file, `get_extensions`. Bare `urlcode capabilities`, `recipes
+list`, the compact `llms.txt` index and `llms-full.txt` remain deliberate
+fallback/reference: in a source checkout read the matching task guide from
+`docs/`; in an npm installation search the heading in `llms-full.txt`.
+When the project has an operator host file, inspect `urlcode extensions
+--project <dir> --host-file <absolute-file> --json` (MCP: `get_extensions`)
+before writing extension configuration or project hooks. The report is the
+machine-readable source for config/policy schemas, hook contracts, supported
+project-owned authoring surfaces and fast checks.
+When `urlcode.extensions.lock.json` is committed, use MCP
+`get_extension_artifacts` to verify and inventory the locked declarative data,
+then `get_extension_artifact` for only the needed schema, example or README.
+Without MCP, run `urlcode extension-artifacts inspect --project <dir> --json`
+before reading its cache. An artifact is inert authoring data: it does not
+install the matching npm package, register executable code or grant authority.
+Do not install/update one unless the user requests that project change and
+names an immutable `extensions@v…` release.
+The `SPECIFICATION` section of `llms-full.txt` and
+`schemas/urlcode.schema.json` resolve contract questions in an installed
+package. A source checkout also has `docs/SPECIFICATION.md`. Archived plans are
+historical, not valid YAML guidance.
 
 ## Workflow
 
@@ -49,6 +72,24 @@ questions. Archived plans are historical, not valid YAML guidance.
 - Create every referenced module, page and asset **before** validating. All
   source paths resolve from the project root. Trusted modules can import Node built-ins and npm packages;
   only `sandbox: true` modules are restricted to the relative snapshotted graph.
+- Treat core, installed extensions and product UI as one application with
+  different owners. Follow an extension's published `authoring` surfaces in
+  this order: configuration; theme and copy; component or template override;
+  project CSS; declared trusted hook. Keep auth/admin security and workflow
+  behavior in their packages and keep only the product-specific difference in
+  the project. Build a new extension only for a reusable capability the
+  installed contracts cannot express. Extension hooks run trusted in-process
+  and reject `sandbox: true` in contract v1.
+- When a React frontend has `components.json`, follow the installed official
+  shadcn/ui skill for component discovery, composition, accessibility and
+  semantic Tailwind styling. Start with `shadcn info --json`, then use its
+  `shadcn docs`/`search` flow or configured MCP registry before generating a
+  component. Do not put React components in URLCode's server template renderer
+  merely because it uses shadcn-compatible tokens.
+- Run the extension's published `fastChecks` while iterating, then the full
+  project checks before handoff. Theme and copy changes should not rebuild the
+  framework packages. Full workspace/package checks may take several minutes;
+  give them enough time to finish instead of repeatedly rebuilding.
 - Write exact response fixtures for success and failure, covering every active
   method, middleware behavior, HEAD, and any range or cache semantics.
 - Follow `docs/BEST-PRACTICES.md` for layout and readability as the project grows.
@@ -107,6 +148,26 @@ Use the real intended route count, including any `site`-generated routes. In a
 runtime checkout, substitute `node src/cli.ts` for `urlcode`; in a project made
 from `urlcode-template`, the equivalent npm scripts work. External bindings
 require an already reviewed policy — add `--policy` where needed.
+
+## Feedback after a real attempt
+
+After a task, give feedback only when a real attempt exposed one of these:
+
+- a **capability gap**: a requirement the current contract cannot express;
+- a **repeated-workaround**: custom code recreating framework plumbing likely
+  to recur across applications;
+- a **documentation/discovery gap**: the supported path was hard to find or
+  distinguish from an unsupported one; or
+- a **suspected defect**: observed behavior contradicts the installed contract
+  or its fixture.
+
+Produce a compact draft, not an issue: category, installed runtime/target,
+sanitized route or YAML fragment, the exact validation/test observation, the
+smallest expected behavior, and a proposed fixture. Do not include secrets,
+customer URLs, raw source, or one-off product logic. Search existing URLCode
+issues first and name a likely duplicate when found. You may propose a new
+issue or comment, but never create or update a GitHub issue without the user's
+explicit approval.
 
 ## Boundaries
 
