@@ -18,6 +18,10 @@ another version.
 
 ## Read before advising
 
+In a source checkout, use the `docs/` paths below. In an npm installation,
+search the same document headings in `llms-full.txt`; the archive deliberately
+does not duplicate the repository's authored documentation tree.
+
 1. `docs/OPERATIONS.md` — process and container deployment, shutdown, exposure.
 2. `docs/DEPLOYMENT-CHECKS.md` — `verify-deployment`: what it checks against a
    live target and what it deliberately does not.
@@ -71,7 +75,7 @@ urlcode verify-deployment --project ./my-links --target https://links.example \
 
 Run the actual commands and report actual results, never "should work" or
 "should be reachable". `verify-deployment` needs a real target; do not
-simulate its output. In a runtime checkout, substitute `node src/cli.ts` for
+simulate its output. In a runtime checkout, substitute `node packages/core/src/cli.ts` for
 `urlcode`. Pass `--policy` where a snapshot needs bindings already reviewed
 by the operator.
 
