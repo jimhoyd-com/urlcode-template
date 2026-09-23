@@ -59,7 +59,7 @@ historical, not valid YAML guidance.
 shared skills and LLM tooling. Its remote MCP supplements the local
 project-aware `urlcode` server; never replace `.mcp.json` or put its bearer
 token in project files. Configure it only through the MCP client's secret
-facility.
+facility. Its machine-readable entry point is `https://urlcode.ai/llms.txt`.
 
 ## Workflow
 

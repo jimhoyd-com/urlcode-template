@@ -18,6 +18,16 @@ setup needed. Both point at the docs shipped in
 `node_modules/@jimhoyd/urlcode/` rather than restating the contract, so
 they always match your pinned runtime version, not `main`.
 
+This template also includes `.mcp.json`, which registers the project's
+read-only local `urlcode mcp` server for Claude Code and Codex. It lets an
+agent inspect this project's routes and validate its changes without guessing.
+Keep that local server registered. [URLCode AI](https://urlcode.ai/) is an
+optional hosted companion for shared skills and LLM tooling; it never replaces
+the local project server. Its machine-readable entry point is
+[`https://urlcode.ai/llms.txt`](https://urlcode.ai/llms.txt). If you configure
+its authenticated remote MCP, store its bearer token in your MCP client's
+secret facility, never in this project.
+
 Use the [YAML cookbook](https://github.com/jimhoyd-com/urlcode/blob/main/docs/YAML-GUIDE.md)
 and [field reference](https://github.com/jimhoyd-com/urlcode/blob/main/docs/YAML-REFERENCE.md)
 for complete configuration examples. Without the bundled skills, give your AI
