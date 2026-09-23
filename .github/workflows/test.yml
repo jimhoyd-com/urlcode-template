@@ -23,3 +23,10 @@ jobs:
       - run: npm test
       - run: npm run audit
       - run: npm run benchmark -- --requests 50 --concurrency 2
+  verify-complete:
+    name: verify-complete
+    needs: test
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: test "${{ needs.test.result }}" = success
