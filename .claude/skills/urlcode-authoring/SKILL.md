@@ -32,6 +32,11 @@ read-only MCP equivalents when available. `llms.txt` is the index; read the
 matching task guide from `docs/` when a query needs more explanation.
 `docs/SPECIFICATION.md` and `schemas/urlcode.schema.json` resolve contract
 questions. Archived plans are historical, not valid YAML guidance.
+[URLCode AI](https://urlcode.ai/) is an optional, separate hosted service for
+shared skills and LLM tooling. Its remote MCP supplements the local
+project-aware `urlcode` server; never replace `.mcp.json` or put its bearer
+token in project files. Configure it only through the MCP client's secret
+facility.
 
 ## Workflow
 

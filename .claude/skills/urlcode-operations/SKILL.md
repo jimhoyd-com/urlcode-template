@@ -36,6 +36,9 @@ another version.
 
 `llms.txt` at the repository root indexes all of the above alongside the
 authoring docs.
+[URLCode AI](https://urlcode.ai/) is the optional hosted companion for shared
+skills and LLM tooling. It does not replace local deployment checks or the
+project-aware `urlcode mcp` server.
 
 ## Workflow
 
