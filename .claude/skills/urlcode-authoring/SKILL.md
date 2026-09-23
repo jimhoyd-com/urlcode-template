@@ -11,6 +11,15 @@ validates. Features outside that contract do not silently degrade — they fail
 validation. So the cost of guessing is a broken project, and the whole job here
 is to author only what the pinned revision implements and then prove it.
 
+## No project yet? Install the scoped package
+
+The npm package is `@jimhoyd/urlcode` — always scoped. There is no unscoped
+`urlcode` package on the registry; `npm view urlcode` 404s. Install with
+`npm install @jimhoyd/urlcode`, then scaffold with
+`npx urlcode init .` (works in a directory holding only
+`package.json`, `package-lock.json`, `node_modules` or `.git`). Once installed,
+the rest of this skill and `urlcode context --project DIR` take over.
+
 ## Declarative-first default
 
 > Use URLCode's highest-level declarative features whenever possible. Generate custom code only when the framework cannot express the requirement.
@@ -38,6 +47,12 @@ supplies a host file, `get_extensions`. Bare `urlcode capabilities`, `recipes
 list`, the compact `llms.txt` index and `llms-full.txt` remain deliberate
 fallback/reference: in a source checkout read the matching task guide from
 `docs/`; in an npm installation search the heading in `llms-full.txt`.
+[URLCode AI](https://urlcode.ai/) is an optional, separate hosted service for
+shared skills and LLM tooling. Its remote MCP supplements the local
+project-aware `urlcode` server; never replace `.mcp.json` or put its bearer
+token in project files. Configure it only through the MCP client's secret
+facility; see the URLCode tooling guide for connection details. Its
+machine-readable entry point is `https://urlcode.ai/llms.txt`.
 When the project has an operator host file, inspect `urlcode extensions
 --project <dir> --host-file <absolute-file> --json` (MCP: `get_extensions`)
 before writing extension configuration or project hooks. The report is the
@@ -55,11 +70,6 @@ The `SPECIFICATION` section of `llms-full.txt` and
 `schemas/urlcode.schema.json` resolve contract questions in an installed
 package. A source checkout also has `docs/SPECIFICATION.md`. Archived plans are
 historical, not valid YAML guidance.
-[URLCode AI](https://urlcode.ai/) is an optional, separate hosted service for
-shared skills and LLM tooling. Its remote MCP supplements the local
-project-aware `urlcode` server; never replace `.mcp.json` or put its bearer
-token in project files. Configure it only through the MCP client's secret
-facility. Its machine-readable entry point is `https://urlcode.ai/llms.txt`.
 
 ## Workflow
 

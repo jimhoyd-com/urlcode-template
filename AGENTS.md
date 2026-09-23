@@ -22,8 +22,7 @@ static serving and authentication. Read this file before changing anything.
 
 When present, `.mcp.json` registers the read-only `urlcode mcp` server; prefer its
 tools (also `get_manifest`) to reading documents. Inspect `get_extensions` before
-replacing extension behavior. `--allow-authoring` is an operator opt-in; never add it. For a committed artifact lock, use `get_extension_artifacts`/`get_extension_artifact`; they expose verified inert data and never activate an extension.
-[URLCode AI](https://urlcode.ai/) is a separate optional hosted service for shared skills and LLM tooling; its remote MCP never replaces this local project server, and its credential belongs only in a client secret facility, never project files. Its machine-readable entry point is `https://urlcode.ai/llms.txt`.
+replacing extension behavior. `--allow-authoring` is an operator opt-in; never add it. For a committed artifact lock, use `get_extension_artifacts`/`get_extension_artifact`; they expose verified inert data and never activate an extension. [URLCode AI](https://urlcode.ai/) is a separate optional hosted service for shared skills and LLM tooling; its remote MCP never replaces this local project server, and its credential belongs only in a client secret facility, never project files. Its machine-readable entry point is `https://urlcode.ai/llms.txt`.
 
 ## What the runtime provides (this version)
 
@@ -57,10 +56,10 @@ record the reason in `sandboxReason`. Try `redirect` (relative or `/**`) or `res
 ```sh
 urlcode validate --local
 urlcode test
-urlcode audit --expect-routes 2
+urlcode audit --expect-routes 0
 ```
 
-Run all three after every change, updating the route count deliberately and adding `tests/requests.json` fixtures for every new route (positive/negative, every active method, HEAD). No global install: use `node /path/to/urlcode/packages/core/src/cli.ts`.
+With no active routes, this initial audit intentionally exits nonzero with `no-active-routes`. Add the first route and its fixture, then make the audit pass; remove `allow-empty-project: true` from the generated GitHub workflow at that point. `N` counts declared routes plus one route for each active `site.*` convention; an audit mismatch reports the declared/generated split. Update it deliberately and add `tests/requests.json` fixtures for every new route (positive/negative, every active method, HEAD). No global install: use `node /path/to/urlcode/packages/core/src/cli.ts`.
 
 ## Feedback
 

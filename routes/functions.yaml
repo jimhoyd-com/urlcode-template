@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/jimhoyd-com/urlcode/v0.5.0/schemas/urlcode.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/jimhoyd-com/urlcode/v0.5.8/schemas/urlcode.schema.json
 # File locations do not change route paths. GET/HEAD are the default methods.
 version: "1"
 routes:

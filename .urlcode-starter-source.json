@@ -1,0 +1,8 @@
+{
+  "files": [
+    ".gitattributes",
+    "Makefile",
+    "tests/requests.json",
+    "urlcode.yaml"
+  ]
+}
