@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "urlcode": {
+      "command": "npx",
+      "args": [
+        "--no",
+        "--package",
+        "@jimhoyd/urlcode",
+        "urlcode",
+        "mcp",
+        "--project",
+        "."
+      ]
+    }
+  }
+}

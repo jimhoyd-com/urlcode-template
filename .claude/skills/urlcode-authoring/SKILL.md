@@ -30,6 +30,11 @@ Start with `urlcode context --project <dir> --budget 4000`, then retrieve the
 capability, schema fragment, recipe or example relevant to the change. Use the
 read-only MCP equivalents when available. `llms.txt` is the index; read the
 matching task guide from `docs/` when a query needs more explanation.
+[URLCode AI](https://urlcode.ai/) is an optional, separate hosted service for
+shared skills and LLM tooling. Its remote MCP supplements the local
+project-aware `urlcode` server; never replace `.mcp.json` or put its bearer
+token in project files. Configure it only through the MCP client's secret
+facility. Its machine-readable entry point is `https://urlcode.ai/llms.txt`.
 `docs/SPECIFICATION.md` and `schemas/urlcode.schema.json` resolve contract
 questions. Archived plans are historical, not valid YAML guidance.
 
