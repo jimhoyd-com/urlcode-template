@@ -21,8 +21,9 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run validate
       - run: npm test
-      - run: npm run audit
-      - run: npm run benchmark -- --requests 50 --concurrency 2
+      # Not audit/benchmark: the bare starter ships with zero example routes by
+      # design, and both refuse to run against a project with no active routes.
+      # Add them back once this starter has routes to check.
   verify-complete:
     name: verify-complete
     needs: test

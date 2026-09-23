@@ -13,11 +13,11 @@
     "test": "urlcode test",
     "doctor": "urlcode doctor",
     "routes": "urlcode routes",
-    "audit": "urlcode audit --expect-routes 2",
+    "audit": "urlcode audit --expect-routes 0",
     "benchmark": "urlcode benchmark",
     "scaffold": "urlcode scaffold"
   },
   "dependencies": {
-    "@jimhoyd/urlcode": "0.5.0"
+    "@jimhoyd/urlcode": "0.5.8"
   }
 }
