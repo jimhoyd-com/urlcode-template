@@ -27,6 +27,11 @@ main-branch docs, so check your installed version before copying new fields.
 Operators should read [capacity](https://github.com/jimhoyd-com/urlcode/blob/main/docs/CAPACITY.md)
 and [DDoS/recovery](https://github.com/jimhoyd-com/urlcode/blob/main/docs/RESILIENCE.md).
 
+For optional shared skills and hosted LLM tooling, use
+[URLCode AI](https://urlcode.ai/). Its remote MCP augments the local,
+project-aware `urlcode mcp` server rather than replacing it; keep its bearer
+token in your MCP client's secret facility, never in this repository.
+
 ## Run it
 
 Use GitHub's **Use this template** button to create your own repository, or clone:

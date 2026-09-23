@@ -55,6 +55,11 @@ The `SPECIFICATION` section of `llms-full.txt` and
 `schemas/urlcode.schema.json` resolve contract questions in an installed
 package. A source checkout also has `docs/SPECIFICATION.md`. Archived plans are
 historical, not valid YAML guidance.
+[URLCode AI](https://urlcode.ai/) is an optional, separate hosted service for
+shared skills and LLM tooling. Its remote MCP supplements the local
+project-aware `urlcode` server; never replace `.mcp.json` or put its bearer
+token in project files. Configure it only through the MCP client's secret
+facility.
 
 ## Workflow
 
