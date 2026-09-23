@@ -13,7 +13,7 @@
     "test": "urlcode test",
     "doctor": "urlcode doctor",
     "routes": "urlcode routes",
-    "audit": "urlcode audit --expect-routes 2",
+    "audit": "urlcode audit --expect-routes 0",
     "benchmark": "urlcode benchmark",
     "scaffold": "urlcode scaffold"
   },
