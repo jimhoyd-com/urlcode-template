@@ -3,9 +3,9 @@
 **A URL that runs your code, and a URL that redirects.** Start with two examples,
 then change the YAML and function to build your own project.
 
-There is one starter, containing both examples. If URLCode is already installed,
-`urlcode init ../gitroll-link` creates the same route examples; no `--template`
-choice is needed. This repository adds a pinned runtime dependency and npm workflow.
+This repository is the two-route example starter and adds a pinned runtime
+dependency and npm workflow. `urlcode init ../gitroll-link` creates the smaller
+bare scaffold; use this template when you want the function and redirect examples.
 
 ## YAML and AI authoring references
 
