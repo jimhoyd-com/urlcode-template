@@ -1,7 +1,8 @@
 .DEFAULT_GOAL := help
 
-# Install the runtime separately, or override: URLCODE='node /path/to/urlcode/dist/cli.js'
-URLCODE ?= urlcode
+# Uses the pinned project dependency after `npm ci`; otherwise falls back to a
+# separately installed runtime. Override: URLCODE='node /path/to/urlcode/dist/cli.js'
+URLCODE ?= $(if $(wildcard node_modules/.bin/urlcode),node_modules/.bin/urlcode,urlcode)
 HOST ?= 127.0.0.1
 PORT ?= 3000
 
@@ -10,6 +11,9 @@ help:
 	@echo "make dev       Run this app with reload and .env.local"
 	@echo "make validate  Validate this app and its local bindings"
 	@echo "make test      Run this app's HTTP assertions"
+	@echo "make routes    List effective routes"
+	@echo "make audit     Check route coverage and readiness"
+	@echo "make benchmark Measure local request performance"
 	@echo "make serve     Run a fixed snapshot, without local dotenv"
 	@echo "make doctor    Show runtime/platform details"
 	@echo "Options: PORT=3001 HOST=127.0.0.1 URLCODE=urlcode"
@@ -26,5 +30,9 @@ doctor:
 	$(URLCODE) doctor
 
 .PHONY: routes audit benchmark
-routes audit benchmark:
+routes benchmark:
 	$(URLCODE) $@ --project . $(ARGS)
+
+# Keep the expected count in package.json, alongside the npm audit command.
+audit:
+	npm run audit -- $(ARGS)

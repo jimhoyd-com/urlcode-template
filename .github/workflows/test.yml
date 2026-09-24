@@ -21,13 +21,39 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run validate
       - run: npm test
-      # Not audit/benchmark: the bare starter ships with zero example routes by
-      # design, and both refuse to run against a project with no active routes.
-      # Add them back once this starter has routes to check.
+  readiness:
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '26'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Allow only the initial empty-project audit result
+        run: |
+          set +e
+          output="$(npm run audit -- --compliance baseline)"
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          report="$(printf '%s\n' "$output" | tail -n 1)"
+          node -e '
+            const [status, report] = process.argv.slice(1);
+            const parsed = JSON.parse(report);
+            process.exit(status === "1" && parsed.ready === false &&
+              Array.isArray(parsed.notReadyReasons) &&
+              parsed.notReadyReasons.length === 1 &&
+              parsed.notReadyReasons[0] === "no-active-routes" ? 0 : 1);
+          ' "$status" "$report"
   verify-complete:
     name: verify-complete
-    needs: test
+    needs: [test, readiness]
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - run: test "${{ needs.test.result }}" = success
+      - run: test "${{ needs.test.result }}" = success && test "${{ needs.readiness.result }}" = success
